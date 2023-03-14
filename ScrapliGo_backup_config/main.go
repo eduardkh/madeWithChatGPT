@@ -7,16 +7,29 @@ import (
 
 	"github.com/scrapli/scrapligo/driver/options"
 	"github.com/scrapli/scrapligo/platform"
+	"github.com/spf13/viper"
 )
 
 func main() {
+	// Load configuration from config file
+	viper.SetConfigFile("config.yaml")
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatalf("Failed to read config file: %v", err)
+	}
+
+	// Get IP address, username, password, and SSH config file path from config file
+	ip := viper.GetString("device")
+	username := viper.GetString("username")
+	password := viper.GetString("password")
+	sshConfigFile := viper.GetString("ssh_config_file")
+
 	p, err := platform.NewPlatform(
 		"cisco_iosxe",
-		"192.168.99.160", // Replace with the IP address of your device
+		ip,
 		options.WithAuthNoStrictKey(),
-		options.WithAuthUsername("cisco"), // Replace with the username for your device
-		options.WithAuthPassword("cisco"), // Replace with the password for your device
-		options.WithSSHConfigFile("~/.ssh/config"),
+		options.WithAuthUsername(username),
+		options.WithAuthPassword(password),
+		options.WithSSHConfigFile(sshConfigFile),
 	)
 	if err != nil {
 		log.Fatalf("Failed to create platform: %v", err)
@@ -44,10 +57,10 @@ func main() {
 		log.Fatalf("Failed to send command: %v", err)
 	}
 
-	err = ioutil.WriteFile("backup.txt", []byte(response.Result), 0644)
+	err = ioutil.WriteFile("backup.ios", []byte(response.Result), 0644)
 	if err != nil {
 		log.Fatalf("Failed to write configuration to file: %v", err)
 	}
 
-	fmt.Println("Backup saved to backup.txt")
+	fmt.Println("Backup saved to backup.ios")
 }
