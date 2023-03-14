@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"regexp"
+	"time"
 
 	"github.com/scrapli/scrapligo/driver/options"
 	"github.com/scrapli/scrapligo/platform"
@@ -57,10 +59,23 @@ func main() {
 		log.Fatalf("Failed to send command: %v", err)
 	}
 
-	err = ioutil.WriteFile("backup.ios", []byte(response.Result), 0644)
+	// Use regular expression to extract hostname from running config output
+	hostnameRegex := regexp.MustCompile(`hostname\s+(\S+)`)
+	hostnameMatch := hostnameRegex.FindStringSubmatch(response.Result)
+	if len(hostnameMatch) != 2 {
+		log.Fatalf("Failed to extract hostname from running config output")
+	}
+	hostname := hostnameMatch[1]
+
+	// Get current date in YYYY-MM-DD format
+	date := time.Now().Format("2006-01-02")
+
+	// Save output to file with hostname and date in filename
+	filename := fmt.Sprintf("%s_%s.ios", hostname, date)
+	err = ioutil.WriteFile(filename, []byte(response.Result), 0644)
 	if err != nil {
 		log.Fatalf("Failed to write configuration to file: %v", err)
 	}
 
-	fmt.Println("Backup saved to backup.ios")
+	fmt.Printf("Backup saved to %s\n", filename)
 }
