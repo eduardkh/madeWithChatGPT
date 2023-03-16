@@ -1,0 +1,2 @@
+logLevel: debug
+databaseUrl: postgres://user:password@localhost:5432/mydb
