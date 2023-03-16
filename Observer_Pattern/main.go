@@ -14,14 +14,14 @@ type Observer interface {
 	Update()
 }
 
-// Subject is the object that notifies its observers of changes
+// Subject is the object that maintains a list of its dependents (observers) and notifies them of any changes in its state
 type Subject interface {
 	RegisterObserver(observer Observer)
 	RemoveObserver(observer Observer)
 	NotifyObservers()
 }
 
-// TextFile is a concrete subject that watches for changes in a text file
+// Concrete Subject: TextFile is the concrete implementation of the subject interface that maintains its own state and notifies observers when its state changes
 type TextFile struct {
 	observers []Observer
 	filePath  string
@@ -58,7 +58,7 @@ func (t *TextFile) Watch() {
 		// Notify the observers if the contents of the file have changed
 		if string(data) != t.lastData {
 			t.lastData = string(data)
-			log.Printf("File %s has changed at %s\n", t.filePath, time.Now().Format(time.RFC3339))
+			log.Printf("Subject: TextFile - File %s has changed at %s\n", t.filePath, time.Now().Format(time.RFC3339))
 			t.NotifyObservers()
 		}
 
@@ -67,32 +67,32 @@ func (t *TextFile) Watch() {
 	}
 }
 
-// ObserverImpl is a concrete observer that reacts to changes in the text file
+// Concrete Observer: ObserverImpl is the concrete implementation of the observer interface that receives notifications from the subject when its state changes
 type ObserverImpl struct {
 	name string
 }
 
 func (o *ObserverImpl) Update() {
-	log.Printf("%s: The text file has changed!\n", o.name)
+	log.Printf("Observer: %s - Received notification of state change\n", o.name)
 }
 
 func main() {
-	// Create a new text file subject
-	textFile := &TextFile{filePath: "data.txt"}
+	// Create a new Concrete Subject: TextFile
+	textFile := &TextFile{filePath: "state.txt"}
 
-	// Create four new observers
+	// Create four new Concrete Observer: ObserverImpl objects
 	observer1 := &ObserverImpl{name: "Observer1"}
 	observer2 := &ObserverImpl{name: "Observer2"}
 	observer3 := &ObserverImpl{name: "Observer3"}
 	observer4 := &ObserverImpl{name: "Observer4"}
 
-	// Register the observers as observers of the text file
+	// Register the observers as observers of the Concrete Subject: TextFile
 	textFile.RegisterObserver(observer1)
 	textFile.RegisterObserver(observer2)
 	textFile.RegisterObserver(observer3)
 	textFile.RegisterObserver(observer4)
 
-	// Watch the text file for changes
+	// Watch the Concrete Subject: TextFile for changes
 	go textFile.Watch()
 
 	// Wait for input from the user to exit
