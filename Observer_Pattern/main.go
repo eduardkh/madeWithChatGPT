@@ -80,11 +80,17 @@ func main() {
 	// Create a new text file subject
 	textFile := &TextFile{filePath: "data.txt"}
 
-	// Create a new observer
-	observer := &ObserverImpl{name: "Observer1"}
+	// Create four new observers
+	observer1 := &ObserverImpl{name: "Observer1"}
+	observer2 := &ObserverImpl{name: "Observer2"}
+	observer3 := &ObserverImpl{name: "Observer3"}
+	observer4 := &ObserverImpl{name: "Observer4"}
 
-	// Register the observer as an observer of the text file
-	textFile.RegisterObserver(observer)
+	// Register the observers as observers of the text file
+	textFile.RegisterObserver(observer1)
+	textFile.RegisterObserver(observer2)
+	textFile.RegisterObserver(observer3)
+	textFile.RegisterObserver(observer4)
 
 	// Watch the text file for changes
 	go textFile.Watch()
