@@ -2,27 +2,30 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"time"
 
-	"github.com/spf13/viper"
-
+	"Singleton_Pattern/config"
 	"Singleton_Pattern/database"
 	"Singleton_Pattern/logging"
 )
 
 func main() {
-	// Load the configuration file
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
-	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println("Error loading config file:", err)
-		return
-	}
+	// Get the configuration data
+	config := config.GetConfig()
 
 	// Use the logging and database modules
-	loggingModule := logging.GetLoggingModule()
-	loggingModule.Log("Hello, world!")
-	databaseModule := database.GetDatabaseModule()
-	result := databaseModule.Query("SELECT * FROM users")
-	fmt.Println(result)
+	loggingModule := logging.GetLoggingModule(config.LogLevel)
+	databaseModule := database.GetDatabaseMock()
+
+	// Update the status every second
+	for {
+		status := fmt.Sprintf("[LOG] Logging level: %s\n[DB] Database URL: %s\n[DB] Max connections: %d\n", config.LogLevel, config.DatabaseURL, config.MaxConnections)
+		loggingModule.Log(status)
+
+		result := databaseModule.Query("SELECT * FROM users")
+		log.Println(status, result)
+
+		time.Sleep(time.Second)
+	}
 }

@@ -1,22 +1,30 @@
 package logging
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type loggingModule interface {
 	Log(msg string)
 }
 
-type loggingImpl struct{}
+type loggingImpl struct {
+	logLevel string
+}
 
 func (lm *loggingImpl) Log(msg string) {
-	fmt.Printf("[LOG] %s\n", msg)
+	if lm.logLevel == "debug" {
+		fmt.Printf("%s", msg)
+	}
 }
 
 var loggingInstance *loggingImpl
 
-func GetLoggingModule() loggingModule {
+func GetLoggingModule(logLevel string) loggingModule {
 	if loggingInstance == nil {
-		loggingInstance = &loggingImpl{}
+		loggingInstance = &loggingImpl{
+			logLevel: logLevel,
+		}
 	}
 	return loggingInstance
 }
