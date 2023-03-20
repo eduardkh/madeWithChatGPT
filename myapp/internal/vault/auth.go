@@ -21,9 +21,9 @@ func (c *Client) AuthenticateWithUserPass(username, password string) (string, er
 }
 
 func (c *Client) Authorize(token, path string) error {
-	client := c.Client.Clone()
-	if client == nil {
-		return fmt.Errorf("failed to clone client")
+	client, err := c.Client.Clone()
+	if err != nil {
+		return fmt.Errorf("failed to clone client: %v", err)
 	}
 	client.SetToken(token)
 
