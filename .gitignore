@@ -4,6 +4,9 @@
 *.dll
 *.so
 *.dylib
+*.db
+raw_oui.txt
+
 
 # Test binary, built with `go test -c`
 *.test
