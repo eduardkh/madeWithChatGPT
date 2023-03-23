@@ -20,7 +20,7 @@ func main() {
 	defer db.Close()
 
 	// Prepare the SQL statement for querying the data
-	stmt, err := db.Prepare("SELECT * FROM oui WHERE oui = ?")
+	stmt, err := db.Prepare("SELECT * FROM oui WHERE oui LIKE ?")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,38 +32,52 @@ func main() {
 	}
 	macAddress := os.Args[1]
 
-	// Remove any separators from the MAC address
+	// Remove any non-alphanumeric characters from the MAC address
 	re := regexp.MustCompile(`[^0-9A-Fa-f]`)
 	macAddress = re.ReplaceAllString(macAddress, "")
 
+	// Convert the MAC address to uppercase
+	macAddress = strings.ToLower(macAddress)
+
 	// Check if the MAC address is valid
-	if len(macAddress) != 12 {
+	if len(macAddress) > 12 || len(macAddress) < 6 {
 		log.Fatal("Invalid MAC address")
 	}
 
+	// Pad the MAC address with zeros to make it 12 characters long
+	if len(macAddress) < 12 {
+		macAddress = fmt.Sprintf("%s%s", macAddress, strings.Repeat("0", 12-len(macAddress)))
+	}
+
 	// Extract the OUI from the MAC address
-	oui := strings.ToLower(macAddress[0:6])
+	oui := macAddress[0:6]
 
 	// Execute the SQL statement with the OUI as the parameter
-	rows, err := stmt.Query(oui)
+	rows, err := stmt.Query(oui + "%")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
 
 	// Print the result
-	if rows.Next() {
+	found := false
+	for rows.Next() {
 		var id int
 		var organization string
 		var address string
 		var city string
 		var country string
+		var oui string
 		err := rows.Scan(&id, &oui, &organization, &address, &city, &country)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("Organization:\t%s\nAddress:\t%s\nCity:\t\t%s\nCountry:\t%s\nOUI:\t\t%s\n", organization, address, city, country, strings.ToUpper(oui))
-	} else {
+		if strings.HasPrefix(strings.ToLower(oui), oui) {
+			fmt.Printf("Organization:\t%s\nAddress:\t%s\nCity:\t\t%s\nCountry:\t%s\nOUI:\t\t%s\n", organization, address, city, country, strings.ToUpper(oui))
+			found = true
+		}
+	}
+	if !found {
 		fmt.Printf("No results found for %s\n", macAddress)
 	}
 	if err := rows.Err(); err != nil {
