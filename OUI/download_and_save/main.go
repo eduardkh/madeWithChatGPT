@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"regexp"
 	"strings"
 
@@ -11,8 +12,15 @@ import (
 )
 
 func main() {
-	// Read the contents of the raw_oui.txt file
-	fileContents, err := ioutil.ReadFile("raw_oui.txt")
+	// Download the contents of the OUI file
+	resp, err := http.Get("https://standards-oui.ieee.org/oui/oui.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+
+	// Read the contents of the response
+	fileContents, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
