@@ -45,7 +45,7 @@ func main() {
 	}
 
 	// Extract the OUI from the MAC address
-	oui := macAddress[0:]
+	oui := macAddress[0:1]
 
 	// Execute the SQL statement with the OUI as the parameter
 	rows, err := stmt.Query(oui + "%")
