@@ -36,21 +36,16 @@ func main() {
 	re := regexp.MustCompile(`[^0-9A-Fa-f]`)
 	macAddress = re.ReplaceAllString(macAddress, "")
 
-	// Convert the MAC address to uppercase
+	// Convert the MAC address to lowercase
 	macAddress = strings.ToLower(macAddress)
 
 	// Check if the MAC address is valid
-	if len(macAddress) > 12 || len(macAddress) < 6 {
+	if len(macAddress) < 1 || len(macAddress) > 12 {
 		log.Fatal("Invalid MAC address")
 	}
 
-	// Pad the MAC address with zeros to make it 12 characters long
-	if len(macAddress) < 12 {
-		macAddress = fmt.Sprintf("%s%s", macAddress, strings.Repeat("0", 12-len(macAddress)))
-	}
-
 	// Extract the OUI from the MAC address
-	oui := macAddress[0:6]
+	oui := macAddress[0:]
 
 	// Execute the SQL statement with the OUI as the parameter
 	rows, err := stmt.Query(oui + "%")
