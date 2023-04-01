@@ -1,0 +1,31 @@
+tech stack:
+  - GO Language
+  - Go Cobra (CLI)
+  - SQLite (BD)
+---
+Board:
+  - creation time
+Columns:
+  - todo
+  - in-progress
+  - Blocked/Impediments
+  - done
+  - archive
+Cards:
+  - title
+  - details
+  - creation timestamp
+  - move to column timestamp
+  - card aging
+  - priority labels:
+      - lowest priority
+      - standard priority
+      - high priority
+CLI:
+  - create Board(specify columns)
+  - create Card(specify arguments)
+  - list Cards
+  - list Card
+  - edit Card(specify arguments)
+  - delete Card
+  - filtering and searching
