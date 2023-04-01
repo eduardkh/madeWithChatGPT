@@ -7,7 +7,6 @@ import (
 	"os"
 	"regexp"
 	"sync"
-	"time"
 
 	"github.com/scrapli/scrapligo/driver/options"
 	"github.com/scrapli/scrapligo/platform"
@@ -92,11 +91,8 @@ func main() {
 			}
 			hostname := hostnameMatch[1]
 
-			// Get current date in YYYY-MM-DD format
-			date := time.Now().Format("2006-01-02")
-
 			// Save output to file with hostname and date in filename
-			filename := fmt.Sprintf("%s_%s.ios", hostname, date)
+			filename := fmt.Sprintf("%s.ios", hostname)
 			err = ioutil.WriteFile(filename, []byte(response.Result), 0644)
 			if err != nil {
 				log.Printf("Failed to write configuration to file for %s: %v", device, err)
