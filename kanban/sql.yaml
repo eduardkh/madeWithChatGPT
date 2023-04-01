@@ -1,0 +1,49 @@
+tables:
+  - name: Board
+    columns:
+      - name: BoardID
+        type: INTEGER
+        primary_key: true
+        autoincrement: true
+      - name: Name
+        type: TEXT
+      - name: CreatedAt
+        type: TIMESTAMP
+
+  - name: Column
+    columns:
+      - name: ColumnID
+        type: INTEGER
+        primary_key: true
+        autoincrement: true
+      - name: BoardID
+        type: INTEGER
+        foreign_key: Board.BoardID
+      - name: Name
+        type: TEXT
+      - name: Position
+        type: INTEGER
+
+  - name: Card
+    columns:
+      - name: CardID
+        type: INTEGER
+        primary_key: true
+        autoincrement: true
+      - name: ColumnID
+        type: INTEGER
+        foreign_key: Column.ColumnID
+      - name: Title
+        type: TEXT
+      - name: Details
+        type: TEXT
+      - name: Priority
+        type: TEXT
+      - name: CreatedAt
+        type: TIMESTAMP
+      - name: MovedAt
+        type: TIMESTAMP
+      - name: CompletedAt
+        type: TIMESTAMP
+      - name: ArchivedAt
+        type: TIMESTAMP
