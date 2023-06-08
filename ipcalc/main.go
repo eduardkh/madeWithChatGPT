@@ -44,19 +44,44 @@ func calculateIPDetails(input string) {
 	for i := range network {
 		broadcast[i] = network[i] | ^ipnet.Mask[i]
 	}
-	hostmin := append(network[:len(network)-1], network[len(network)-1]+1)
-	hostmax := append(broadcast[:len(broadcast)-1], broadcast[len(broadcast)-1]-1)
+
 	ones, bits := ipnet.Mask.Size()
-	hosts := (1 << (bits - ones)) - 2
+
+	var hostmin net.IP
+	var hostmax net.IP
+	var hosts int
+	var message string = ""
+
+	// Check for /31 and /32 subnets (RFC 3021)
+	if ones == 31 {
+		hostmin = network
+		hostmax = broadcast
+		hosts = 2
+		message = "Special    : P2P Network RFC 3021"
+	} else if ones == 32 {
+		hostmin = network
+		hostmax = broadcast
+		hosts = 1
+		message = "Special    : Single Host Address"
+	} else {
+		hostmin = append(network[:len(network)-1], network[len(network)-1]+1)
+		hostmax = append(broadcast[:len(broadcast)-1], broadcast[len(broadcast)-1]-1)
+		hosts = (1 << (bits - ones)) - 2
+	}
 
 	// Print details
 	fmt.Println("Address    :", ip.String()+"/"+fmt.Sprint(ones))
 	fmt.Println("SubnetMask :", net.IP(ipnet.Mask).String())
-	fmt.Println("Network    :", network.String())
-	fmt.Println("Broadcast  :", broadcast.String())
+	if ones < 30 {
+		fmt.Println("Network    :", network.String())
+		fmt.Println("Broadcast  :", broadcast.String())
+	}
+	if ones == 30 {
+		message = "Special    : P2P Network"
+	}
 	fmt.Println("Host Range :", hostmin.String()+" - "+hostmax.String())
 	fmt.Println("Host Number:", hosts)
-	fmt.Println("")
+	fmt.Println(message)
 }
 
 func main() {
