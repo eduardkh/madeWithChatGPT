@@ -65,8 +65,13 @@ func main() {
 	fmt.Printf("Address         : %s/%d\n", ip, subnet)
 	fmt.Println("Network         :", sub.GetNetworkPortion())
 	IPRange := sub.GetIPAddressRange()
-	fmt.Printf("Usable IP Range : %s - %s\n", nextIPAddress(IPRange[0]), previousIPAddress(IPRange[1]))
+	if subnet == 31 {
+		// If the subnet is /31, both IPs are usable per RFC 3021
+		fmt.Printf("Usable IP Range : %s - %s (RFC 3021)\n", IPRange[0], IPRange[1])
+	} else {
+		fmt.Printf("Usable IP Range : %s - %s\n", nextIPAddress(IPRange[0]), previousIPAddress(IPRange[1]))
+	}
 	fmt.Println("Broadcast       :", sub.GetBroadcastAddress())
 	fmt.Println("SubnetMask      :", sub.GetSubnetMask())
-	fmt.Println("Hosts in Subnet :", sub.GetNumberAddressableHosts())
+	fmt.Println("Host in Subnet  :", sub.GetNumberAddressableHosts())
 }
