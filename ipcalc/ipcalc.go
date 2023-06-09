@@ -61,17 +61,34 @@ func main() {
 	// Initialize the subnet calculator
 	sub := ipsubnet.SubnetCalculator(ip, subnet)
 
+	IPRange := sub.GetIPAddressRange()
+	network := sub.GetNetworkPortion()
+	broadcast := sub.GetBroadcastAddress()
+
+	usableIPRange := ""
+	hostInSubnet := ""
+
+	switch subnet {
+	case 31:
+		usableIPRange = fmt.Sprintf("%s - %s (RFC 3021)", IPRange[0], IPRange[1])
+		network = "N/A"
+		broadcast = "N/A"
+		hostInSubnet = "2 (RFC 3021)"
+	case 32:
+		usableIPRange = fmt.Sprintf("%s (Single host IP)", IPRange[0])
+		network = "N/A"
+		broadcast = "N/A"
+		hostInSubnet = "1 (Single host IP)"
+	default:
+		usableIPRange = fmt.Sprintf("%s - %s", nextIPAddress(IPRange[0]), previousIPAddress(IPRange[1]))
+		hostInSubnet = fmt.Sprint(sub.GetNumberAddressableHosts())
+	}
+
 	// Calculate and print the network information
 	fmt.Printf("Address         : %s/%d\n", ip, subnet)
-	fmt.Println("Network         :", sub.GetNetworkPortion())
-	IPRange := sub.GetIPAddressRange()
-	if subnet == 31 {
-		// If the subnet is /31, both IPs are usable per RFC 3021
-		fmt.Printf("Usable IP Range : %s - %s (RFC 3021)\n", IPRange[0], IPRange[1])
-	} else {
-		fmt.Printf("Usable IP Range : %s - %s\n", nextIPAddress(IPRange[0]), previousIPAddress(IPRange[1]))
-	}
-	fmt.Println("Broadcast       :", sub.GetBroadcastAddress())
+	fmt.Println("Network         :", network)
+	fmt.Println("Usable IP Range :", usableIPRange)
+	fmt.Println("Broadcast       :", broadcast)
 	fmt.Println("SubnetMask      :", sub.GetSubnetMask())
-	fmt.Println("Host in Subnet  :", sub.GetNumberAddressableHosts())
+	fmt.Println("Host in Subnet  :", hostInSubnet)
 }
