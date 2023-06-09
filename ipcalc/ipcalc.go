@@ -62,8 +62,11 @@ func main() {
 	sub := ipsubnet.SubnetCalculator(ip, subnet)
 
 	// Calculate and print the network information
-	fmt.Println("Network    :", sub.GetNetworkPortion())
-	fmt.Println("Broadcast  :", sub.GetBroadcastAddress())
+	fmt.Printf("Address         : %s/%d\n", ip, subnet)
+	fmt.Println("Network         :", sub.GetNetworkPortion())
 	IPRange := sub.GetIPAddressRange()
 	fmt.Printf("Usable IP Range : %s - %s\n", nextIPAddress(IPRange[0]), previousIPAddress(IPRange[1]))
+	fmt.Println("Broadcast       :", sub.GetBroadcastAddress())
+	fmt.Println("SubnetMask      :", sub.GetSubnetMask())
+	fmt.Println("Hosts in Subnet :", sub.GetNumberAddressableHosts())
 }
