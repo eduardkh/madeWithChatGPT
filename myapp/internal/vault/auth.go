@@ -6,7 +6,7 @@ import (
 
 func (c *Client) AuthenticateWithUserPass(username, password string) (string, error) {
 	// Replace "userpass" with the correct authentication method's path if different
-	path := fmt.Sprintf("auth/userpass/login/%s", username)
+	path := fmt.Sprintf("secret/data/myapp/%s", username)
 
 	secret, err := c.Client.Logical().Write(path, map[string]interface{}{
 		"password": password,

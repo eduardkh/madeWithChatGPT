@@ -10,10 +10,12 @@ import (
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	fmt.Fprint(w, "Welcome to the main page. Please <a href='/login'>log in</a> to access the secret page.")
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Fprint(w, "<form action='/login' method='POST'>Username: <input type='text' name='username'><br>Password: <input type='password' name='password'><br><input type='submit' value='Log in'></form>")
 }
 
@@ -37,5 +39,6 @@ func loginPostHandler(vaultClient *vault.Client, store *sessions.CookieStore) ht
 }
 
 func secretHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	fmt.Fprint(w, "Welcome to the secret page!")
 }

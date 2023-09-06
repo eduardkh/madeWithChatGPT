@@ -32,7 +32,7 @@ func AuthMiddleware(vaultClient *vault.Client) func(next http.Handler) http.Hand
 				return
 			}
 
-			err := vaultClient.Authorize(token, "your-secret-path") // Replace "your-secret-path" with the actual secret path in Vault
+			err := vaultClient.Authorize(token, "secret/data/myapp/my-secret") // Replace "your-secret-path" with the actual secret path in Vault
 			if err != nil {
 				http.Redirect(w, r, "/login", http.StatusFound)
 				return
