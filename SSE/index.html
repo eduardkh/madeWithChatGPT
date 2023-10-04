@@ -2,26 +2,22 @@
 <html>
 
 <head>
-    <title>Video App</title>
+    <title>SSE with Go</title>
 </head>
 
 <body>
+    <h1>Server Time</h1>
+    <div id="serverTime"></div>
 
-    <h1>Server Timestamp</h1>
-    <div id="timestamp"></div>
+    <script type="text/javascript">
+        // Create a new EventSource connected to /events on server
+        var eventSource = new EventSource("/events");
 
-    <script>
-        function fetchTimestamp() {
-            fetch('/timestamp')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('timestamp').textContent = data;
-                });
-        }
-
-        setInterval(fetchTimestamp, 1000);
+        // Handle incoming messages by updating the div content
+        eventSource.onmessage = function (event) {
+            document.getElementById("serverTime").innerHTML = event.data;
+        };
     </script>
-
 </body>
 
 </html>
