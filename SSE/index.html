@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Video App</title>
+</head>
+
+<body>
+
+    <h1>Server Timestamp</h1>
+    <div id="timestamp"></div>
+
+    <script>
+        function fetchTimestamp() {
+            fetch('/timestamp')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('timestamp').textContent = data;
+                });
+        }
+
+        setInterval(fetchTimestamp, 1000);
+    </script>
+
+</body>
+
+</html>
