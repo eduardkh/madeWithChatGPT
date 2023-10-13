@@ -1,0 +1,7 @@
+/* Custom Styles */
+input:focus {
+    outline: none;
+    border-color: #34D399;
+    /* Tailwind's green-500 */
+    border-width: 2px;
+}

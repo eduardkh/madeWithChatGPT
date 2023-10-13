@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Search</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="p-4">
+    <header class="p-4 flex flex-col items-center">
+        <!-- Toggle Button -->
+        <div class="mb-4">
+            <button id="toggleButton" onclick="toggleSearchType()"
+                class="bg-green-500 text-white leading-relaxed tracking-wide px-4 py-1 rounded hover:bg-green-400">Toggle
+                Search</button>
+        </div>
+
+        <!-- Single Search Section -->
+        <div id="singleSearch" class="mb-4 flex justify-center w-full">
+            <input type="search" placeholder="Search recipes..."
+                class="w-2/3 p-2 text-lg leading-relaxed tracking-wide rounded-l border border-r-0">
+            <button type="submit"
+                class="bg-green-500 text-white text-xl leading-relaxed tracking-wide px-12 py-2 rounded-r border-l-0 hover:bg-green-400">Search</button>
+        </div>
+
+        <!-- Ingredient Search Section -->
+        <div id="ingredientSearch" class="hidden w-full">
+            <div id="ingredientFields" class="mb-4"></div>
+            <!-- Add Ingredient Button -->
+            <div class="mb-4 flex justify-center">
+                <button onclick="addIngredientField()"
+                    class="bg-blue-500 text-white text-xl leading-relaxed tracking-wide px-4 py-2 rounded hover:bg-blue-400">Add
+                    Ingredient</button>
+            </div>
+            <!-- Search Button -->
+            <div class="flex justify-center">
+                <button type="submit"
+                    class="bg-green-500 text-white text-xl leading-relaxed tracking-wide px-14 py-2 rounded hover:bg-green-400">Search</button>
+            </div>
+        </div>
+    </header>
+    <!-- JavaScript File -->
+    <script src="script.js"></script>
+</body>
+
+</html>
