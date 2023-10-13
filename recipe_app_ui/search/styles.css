@@ -1,7 +1,19 @@
 /* Custom Styles */
+
+/* site font */
+body {
+    font-family: 'Rubik', sans-serif;
+}
+
+/* for focus in search box */
 input:focus {
     outline: none;
     border-color: #34D399;
     /* Tailwind's green-500 */
-    border-width: 2px;
+    border-width: 1px;
+}
+
+/* for search icon */
+.icon-span {
+    line-height: 0;
 }
