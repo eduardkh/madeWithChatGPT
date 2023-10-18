@@ -135,3 +135,13 @@ JOIN
     DifficultyData ON 1=1;
 
 ```
+
+> switching database to Mongodb
+
+```bash
+cd madeWithChatGPT/recipe_app
+# spinup a database
+docker-compose up -d
+# connect to the database
+mongosh --host localhost --port 27017
+```
