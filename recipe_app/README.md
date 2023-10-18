@@ -145,3 +145,11 @@ docker-compose up -d
 # connect to the database
 mongosh --host localhost --port 27017
 ```
+
+> set up Fiber web server
+
+```bash
+go mod download
+go mod tidy
+go run main.go
+```
