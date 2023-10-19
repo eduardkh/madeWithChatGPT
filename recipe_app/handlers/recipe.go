@@ -1,29 +1,17 @@
 package handlers
 
 import (
+	"net/http"
 	"recipe_app/models"
 
-	"github.com/gofiber/fiber/v2"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/labstack/echo/v4"
 )
 
-func GetRecipe(client *mongo.Client) fiber.Handler {
-	return func(c *fiber.Ctx) error {
-		idStr := c.Params("id")
-		id, err := primitive.ObjectIDFromHex(idStr)
-		if err != nil {
-			return c.SendStatus(fiber.StatusBadRequest)
-		}
-
-		collection := client.Database("test").Collection("recipes")
-		var recipe models.Recipe
-		err = collection.FindOne(c.Context(), bson.M{"_id": id}).Decode(&recipe)
-		if err != nil {
-			return c.SendStatus(fiber.StatusNotFound)
-		}
-
-		return c.Render("recipe", fiber.Map{"recipe": recipe})
+func GetRecipeHandler(c echo.Context) error {
+	id := c.Param("id")
+	recipe, err := models.GetRecipe(id)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
 	}
+	return c.Render(http.StatusOK, "recipe.html", recipe)
 }

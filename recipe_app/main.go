@@ -1,30 +1,20 @@
 package main
 
 import (
-	"context"
-	"log"
+	"recipe_app/handlers"
 	"recipe_app/routes"
 
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/template/html/v2"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer client.Disconnect(context.TODO())
+	e := echo.New()
 
-	engine := html.New("./views", ".html")
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+	e.Renderer = handlers.TemplateRenderer()
+	routes.RegisterRoutes(e)
 
-	app := fiber.New(fiber.Config{
-		Views: engine,
-	})
-	routes.SetupRoutes(app, client)
-
-	log.Fatal(app.Listen(":3000"))
+	e.Logger.Fatal(e.Start(":3000"))
 }

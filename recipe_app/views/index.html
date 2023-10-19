@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipes Homepage</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Recipes Homepage</title>
 </head>
-
 <body>
-    {{range .recipes}}
-    <h2><a href="/recipe/{{.ID}}">{{.Title}}</a></h2>
-    <p>{{.Introduction}}</p>
-    {{end}}
-</body>
 
+{{ range .recipes }}
+	<h2><a href="/recipe/{{ .ID }}">{{ .Title }}</a></h2>
+	<p>{{ .Introduction }}</p>
+{{ end }}
+
+</body>
 </html>
