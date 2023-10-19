@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"net/http"
 	"recipe_app/models"
 	"strconv"
 	"strings"
@@ -26,13 +27,20 @@ func GetRecipesHandler(c echo.Context) error {
 	}
 
 	// Fetch the recipes from the database
-	recipes, err := models.GetRecipes(page, pageSize)
+	recipes, total, err := models.GetRecipes(page, pageSize)
 	if err != nil {
-		return c.String(500, "Internal Server Error")
+		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	// Render the index page with the fetched recipes
-	return c.Render(200, "index.html", map[string]interface{}{
-		"recipes": recipes,
+	// Calculate the total number of pages
+	totalPages := (total + pageSize - 1) / pageSize
+
+	// Render the index page with the fetched recipes and pagination data
+	return c.Render(http.StatusOK, "index.html", map[string]interface{}{
+		"recipes":    recipes,
+		"total":      total,
+		"page":       page,
+		"pageSize":   pageSize,
+		"totalPages": totalPages,
 	})
 }

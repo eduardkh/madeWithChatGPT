@@ -1,16 +1,34 @@
+<!-- views/index.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Recipes Homepage</title>
 </head>
+
 <body>
 
-{{ range .recipes }}
+	{{ range .recipes }}
 	<h2><a href="/recipe/{{ .ID }}">{{ .Title }}</a></h2>
 	<p>{{ .Introduction }}</p>
-{{ end }}
+	{{ end }}
+
+	<div class="pagination">
+		<a href="/?page=1&pagesize={{ .pageSize }}">First</a>
+		{{ if gt .page 1 }}
+		<a href="/?page={{ previousPage .page }}&pagesize={{ .pageSize }}">Previous</a>
+		{{ end }}
+		Page {{ .page }} of {{ .totalPages }}
+		{{ if lt .page .totalPages }}
+		<a href="/?page={{ nextPage .page }}&pagesize={{ .pageSize }}">Next</a>
+		{{ else }}
+		<span>Next</span>
+		{{ end }}
+		<a href="/?page={{ .totalPages }}&pagesize={{ .pageSize }}">Last</a>
+	</div>
 
 </body>
+
 </html>
