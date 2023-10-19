@@ -10,8 +10,8 @@ import (
 func GetRecipeHandler(c echo.Context) error {
 	id := c.Param("id")
 	recipe, err := models.GetRecipe(id)
-	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
+	if err != nil || recipe == nil {
+		return c.String(http.StatusNotFound, "Recipe not found")
 	}
-	return c.Render(http.StatusOK, "recipe.html", recipe)
+	return c.Render(http.StatusOK, "recipe.html", map[string]interface{}{"recipe": recipe})
 }

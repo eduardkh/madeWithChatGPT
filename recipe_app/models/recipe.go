@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -78,9 +79,13 @@ func GetRecipes(page int, pageSize int) ([]Recipe, error) {
 // GetRecipe fetches a single recipe by its ID
 func GetRecipe(id string) (*Recipe, error) {
 	collection := client.Database("test").Collection("recipes")
-	filter := bson.D{{Key: "_id", Value: id}}
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.D{{Key: "_id", Value: objectID}}
 	var recipe Recipe
-	err := collection.FindOne(context.TODO(), filter).Decode(&recipe)
+	err = collection.FindOne(context.TODO(), filter).Decode(&recipe)
 	if err != nil {
 		return nil, err
 	}
