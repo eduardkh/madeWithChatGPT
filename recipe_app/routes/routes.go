@@ -9,4 +9,5 @@ import (
 
 func SetupRoutes(app *fiber.App, client *mongo.Client) {
 	app.Get("/", handlers.GetRecipes(client))
+	app.Get("/recipe/:id", handlers.GetRecipe(client))
 }

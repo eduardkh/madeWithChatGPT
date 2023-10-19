@@ -9,7 +9,7 @@
 
 <body>
     {{range .recipes}}
-    <h2>{{.Title}}</h2>
+    <h2><a href="/recipe/{{.ID}}">{{.Title}}</a></h2>
     <p>{{.Introduction}}</p>
     {{end}}
 </body>

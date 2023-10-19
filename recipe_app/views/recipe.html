@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.recipe.Title}}</title>
+</head>
+
+<body>
+    <table border="1">
+        <tr>
+            <th>Title</th>
+            <td>{{.recipe.Title}}</td>
+        </tr>
+        <tr>
+            <th>Introduction</th>
+            <td>{{.recipe.Introduction}}</td>
+        </tr>
+        <tr>
+            <th>Prep Time</th>
+            <td>{{.recipe.PrepTime}} minutes</td>
+        </tr>
+        <tr>
+            <th>Cook Time</th>
+            <td>{{.recipe.CookTime}} minutes</td>
+        </tr>
+        <tr>
+            <th>Instructions</th>
+            <td>{{.recipe.Instructions}}</td>
+        </tr>
+        <tr>
+            <th>Notes</th>
+            <td>{{.recipe.Notes}}</td>
+        </tr>
+        <tr>
+            <th>Categories</th>
+            <td>
+                <ul>
+                    {{range .recipe.Categories}}
+                    <li>{{.Name}}</li>
+                    {{end}}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <th>Techniques</th>
+            <td>
+                <ul>
+                    {{range .recipe.Techniques}}
+                    <li>{{.Name}}</li>
+                    {{end}}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <th>Ingredients</th>
+            <td>
+                <ul>
+                    {{range .recipe.Ingredients}}
+                    <li>{{.Quantity}} {{.Unit}} {{.Name}}</li>
+                    {{end}}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <th>Difficulty Level</th>
+            <td>{{.recipe.Difficulty.Level}}</td>
+        </tr>
+        <tr>
+            <th>Publish Date</th>
+            <td>{{.recipe.PublishDate}}</td>
+        </tr>
+        <tr>
+            <th>Create Date</th>
+            <td>{{.recipe.CreateDate}}</td>
+        </tr>
+    </table>
+</body>
+
+</html>
