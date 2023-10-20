@@ -201,3 +201,12 @@ db.recipes.update(
 // Delete a Recipe
 db.recipes.remove({ slug: "chocolate-cake" })
 ```
+
+> MongoDB Database Tools
+
+```bash
+# Download and install the MongoDB Database Tools
+wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2004-x86_64-100.8.0.tgz
+tar -xzf mongodb-database-tools-ubuntu2004-x86_64-100.8.0.tgz
+sudo mv mongodb-database-tools-ubuntu2004-x86_64-100.8.0/bin/* /usr/local/bin/
+```
