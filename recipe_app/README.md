@@ -144,6 +144,13 @@ cd madeWithChatGPT/recipe_app
 docker-compose up -d
 # connect to the database
 mongosh --host localhost --port 27017
+# connect with credentials to the database
+export MONGO_INITDB_ROOT_USERNAME='root'
+export MONGO_INITDB_ROOT_PASSWORD='examplepassword'
+mongosh --host localhost --port 27017 --username ${MONGO_INITDB_ROOT_USERNAME} --password ${MONGO_INITDB_ROOT_PASSWORD}
+# Grant owner role to our database (optional)
+use admin
+db.grantRolesToUser('root', [{ db: 'recipeDB', role: 'dbOwner' }])
 ```
 
 > set up Fiber web server
@@ -169,7 +176,10 @@ go run main.go
 docker-compose up -d
 # connect to the MongoDB server
 mongosh --host localhost --port 27017
-
+# connect with credentials to the database
+export MONGO_INITDB_ROOT_USERNAME='root'
+export MONGO_INITDB_ROOT_PASSWORD='examplepassword'
+mongosh --host localhost --port 27017 --username ${MONGO_INITDB_ROOT_USERNAME} --password ${MONGO_INITDB_ROOT_PASSWORD}
 ```
 
 ```php
@@ -209,4 +219,28 @@ db.recipes.remove({ slug: "chocolate-cake" })
 wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2004-x86_64-100.8.0.tgz
 tar -xzf mongodb-database-tools-ubuntu2004-x86_64-100.8.0.tgz
 sudo mv mongodb-database-tools-ubuntu2004-x86_64-100.8.0/bin/* /usr/local/bin/
+```
+
+> MongoDB Database maintenance
+
+```bash
+export MONGO_INITDB_ROOT_USERNAME='root'
+export MONGO_INITDB_ROOT_PASSWORD='examplepassword'
+# export and import collections
+mongoexport --uri="mongodb://localhost:27017" --db=recipeDB --collection=recipes --out=recipeDB.recipes.json
+mongoimport --uri="mongodb://localhost:27017" --db=recipeDB --collection=recipes --file=recipeDB.recipes.json
+# export and import collections with credentials
+mongoimport --uri="mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/recipeDB?authSource=admin" --collection=recipes --file=recipeDB.recipes.json
+mongoexport --uri="mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/recipeDB?authSource=admin" --collection=recipes --out=recipeDB.recipes.json
+
+# backup and restore database
+mongodump
+mongorestore
+# backup and restore database with credentials
+# dump all databases
+mongodump --uri="mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/?authSource=admin"
+# restore all databases
+mongorestore --uri="mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/?authSource=admin" dump
+# restore single database
+mongorestore --uri="mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/recipeDB?authSource=admin" dump/recipeDB
 ```

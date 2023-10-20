@@ -19,3 +19,4 @@ scrapligobackupconfig
 *.ios
 .venv/
 venv/
+.env

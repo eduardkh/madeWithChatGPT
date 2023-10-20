@@ -2,7 +2,11 @@ package models
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"os"
+
+	"github.com/joho/godotenv"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -47,8 +51,17 @@ type Difficulty struct {
 var client *mongo.Client
 
 func init() {
+	// Load environment variables from .env file
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+
+	mongoUser := os.Getenv("MONGO_INITDB_ROOT_USERNAME")
+	mongoPassword := os.Getenv("MONGO_INITDB_ROOT_PASSWORD")
+	connectionString := fmt.Sprintf("mongodb://%s:%s@localhost:27017", mongoUser, mongoPassword)
+
+	clientOptions := options.Client().ApplyURI(connectionString)
 	var err error
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	client, err = mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		log.Fatal(err)
@@ -61,7 +74,7 @@ func init() {
 
 // GetRecipes fetches a paginated list of recipes from the database
 func GetRecipes(page, pageSize int) ([]Recipe, int, error) {
-	collection := client.Database("test").Collection("recipes")
+	collection := client.Database("recipeDB").Collection("recipes")
 
 	// Find the total number of recipes
 	total, err := collection.CountDocuments(context.TODO(), bson.M{})
@@ -89,7 +102,7 @@ func GetRecipes(page, pageSize int) ([]Recipe, int, error) {
 
 // GetRecipe fetches a single recipe by its ID
 func GetRecipe(id string) (*Recipe, error) {
-	collection := client.Database("test").Collection("recipes")
+	collection := client.Database("recipeDB").Collection("recipes")
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
