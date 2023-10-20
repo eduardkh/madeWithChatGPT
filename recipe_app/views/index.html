@@ -1,33 +1,91 @@
-<!-- views/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Recipes Homepage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Home</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Google Font Rubik -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik&display=swap">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
-<body>
+<body class="bg-pastel flex flex-col min-h-screen">
 
-	{{ range .recipes }}
-	<h2><a href="/recipe/{{ .ID }}">{{ .Title }}</a></h2>
-	<p>{{ .Introduction }}</p>
-	{{ end }}
+    <header class="p-4 flex flex-col items-center">
+        <h1 class="text-5xl font-bold text-gray-900 mb-2">Recipe Home</h1>
+        <p class="text-gray-500 mb-4">Your go-to platform for delightful recipes</p>
+        <div class="flex justify-center w-full">
+            <input type="search" placeholder="Search recipes..."
+                class="w-1/2 p-2 text-lg leading-relaxed tracking-wide rounded-l border border-r-0">
+            <button type="submit"
+                class="bg-green-500 text-white text-2xl leading-relaxed tracking-wide w-1/6 py-1 rounded-r hover:bg-green-400">
+                <span class="block md:hidden icon-span"><i class="fas fa-search"></i></span>
+                <span class="hidden md:block">Search</span>
+            </button>
+        </div>
+    </header>
 
-	<div class="pagination">
-		<a href="/?page=1&pagesize={{ .pageSize }}">First</a>
-		{{ if gt .page 1 }}
-		<a href="/?page={{ previousPage .page }}&pagesize={{ .pageSize }}">Previous</a>
-		{{ end }}
-		Page {{ .page }} of {{ .totalPages }}
-		{{ if lt .page .totalPages }}
-		<a href="/?page={{ nextPage .page }}&pagesize={{ .pageSize }}">Next</a>
-		{{ else }}
-		<span>Next</span>
-		{{ end }}
-		<a href="/?page={{ .totalPages }}&pagesize={{ .pageSize }}">Last</a>
-	</div>
+    <main class="p-4 grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-auto">
+        <!-- Recipe Cards -->
+        {{ range .recipes }}
+
+        <div class="bg-white p-4 rounded shadow hover:bg-green-50">
+            <a href="/recipe/{{ .ID }}">
+                <img src="https://cdn.pixabay.com/photo/2017/02/15/10/39/salad-2068220_960_720.jpg" alt="{{ .Title }}"
+                    class="w-full rounded-t">
+            </a>
+            <h2 class="text-lg font-bold mt-2">{{ .Title }}</h2>
+            <p class="text-gray-500">{{ .Introduction }}</p>
+            <div class="mt-4 flex justify-between">
+            </div>
+
+        </div>
+
+        {{ end }}
+    </main>
+
+    <nav class="flex justify-center space-x-4 mb-4">
+        <!-- Font Awesome Icons -->
+        <!-- first page -->
+        <a href="/?page=1&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
+                class="fas fa-angle-double-left"></i></a>
+        <!-- previous page -->
+        {{ if gt .page 1 }}
+        <a href="/?page={{ previousPage .page }}&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
+                class="fas fa-angle-left"></i></a>
+        {{ else }}
+        <span class="text-gray-400 flex items-center cursor-not-allowed">
+            <i class="fas fa-angle-left"></i>
+        </span>
+        {{ end }}
+        <!-- current page -->
+        <a href="#" class="text-indigo-500">{{ .page }} of {{ .totalPages }}</a>
+        <!-- next page -->
+        {{ if lt .page .totalPages }}
+        <a href="/?page={{ nextPage .page }}&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
+                class="fas fa-angle-right"></i></a>
+        {{ else }}
+        <span class="text-gray-400 flex items-center cursor-not-allowed">
+            <i class="fas fa-angle-right"></i>
+        </span>
+        {{ end }}
+        <!-- last page -->
+        <a href="/?page={{ .totalPages }}&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
+                class="fas fa-angle-double-right"></i></a>
+    </nav>
+
+    <footer class="p-4 mt-auto bg-white">
+        <!-- Footer Content -->
+        <div class="text-center">
+            <p>© 2023 Your Recipe Site</p>
+        </div>
+    </footer>
 
 </body>
 

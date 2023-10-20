@@ -16,5 +16,8 @@ func main() {
 	e.Renderer = handlers.TemplateRenderer()
 	routes.RegisterRoutes(e)
 
+	// Serve static files
+	e.Static("/", "static")
+
 	e.Logger.Fatal(e.Start(":3000"))
 }

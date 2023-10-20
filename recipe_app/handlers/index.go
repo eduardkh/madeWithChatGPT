@@ -23,7 +23,7 @@ func GetRecipesHandler(c echo.Context) error {
 		page = 1
 	}
 	if pageSize <= 0 {
-		pageSize = 3
+		pageSize = 8
 	}
 
 	// Fetch the recipes from the database
