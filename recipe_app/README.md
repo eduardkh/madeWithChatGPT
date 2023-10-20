@@ -153,3 +153,51 @@ go mod download
 go mod tidy
 go run main.go
 ```
+
+> switching to Echo web server
+
+```bash
+go mod download
+go mod tidy
+go run main.go
+```
+
+> CRUD with Mongosh
+
+```bash
+# spin-up the MongoDB server
+docker-compose up -d
+# connect to the MongoDB server
+mongosh --host localhost --port 27017
+
+```
+
+```php
+//  Read All Recipes
+db.recipes.find()
+
+//  Create a Recipe
+db.recipes.insert({
+  title: "Chocolate Cake",
+  slug: "chocolate-cake",
+  ingredients: ["2 cups flour", "1.5 cups sugar", "0.5 cups cocoa powder"],
+  instructions: "Mix ingredients and bake at 350F for 25 minutes."
+})
+
+// Read One Recipe (by slug)
+db.recipes.findOne({ slug: "chocolate-cake" })
+
+// Update a Recipe
+db.recipes.update(
+  { slug: "chocolate-cake" },
+  {
+    $set: {
+      title: "Delicious Chocolate Cake",
+      instructions: "Mix ingredients well and bake at 350F for 25 minutes."
+    }
+  }
+)
+
+// Delete a Recipe
+db.recipes.remove({ slug: "chocolate-cake" })
+```
