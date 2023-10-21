@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Home</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Font Rubik -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik&display=swap">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body class="bg-pastel flex flex-col min-h-screen">
+
+    <header class="p-4 flex flex-col items-center">
+        <h1 class="text-5xl font-bold text-gray-700 mb-2">Recipe Home</h1>
+        <p class="text-gray-500">Your go-to platform for delightful recipes</p>
+    </header>
+
+    <main class="p-12 flex flex-col items-center">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">Recipe Title</h2>
+        <div class="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 md:grid-cols-2">
+            <figure
+                class="flex flex-col items-center justify-center p-8 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-tl-lg md:border-r dark:bg-gray-800 dark:border-gray-700">
+                <figure class="max-w-lg">
+                    <img class="h-auto max-w-full"
+                        src="https://cdn.pixabay.com/photo/2017/02/15/10/39/salad-2068220_960_720.jpg"
+                        alt="image description">
+                </figure>
+            </figure>
+            <figure
+                class="flex flex-col items-center justify-center p-8 text-center bg-white border-b border-gray-200 rounded-tr-lg dark:bg-gray-800 dark:border-gray-700">
+                <figcaption class="flex items-center justify-center space-x-3 mb-2">
+                    <div class="space-y-0.5 font-medium dark:text-white text-left">
+
+                        <h2 class="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Recipe Summary</h2>
+                        <ul class="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
+                            <!-- individual ingredient left side list-->
+                            <li class="flex items-center">
+                                <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                prep time: 20 min
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                cook time: 45 min
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                difficulty: 7
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="space-y-0.5 font-medium dark:text-white text-left">
+
+                        <h2 class="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Recipe Info</h2>
+                        <ul class="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
+                            <!-- individual ingredient right side list-->
+                            <li class="flex items-center">author: Eduard Khiaev</li>
+                            <li class="flex items-center">categories: uzbek, plov</li>
+                            <li class="flex items-center">techniques: baking, boiling</li>
+                        </ul>
+                    </div>
+                </figcaption>
+                <blockquote class="max-w-2xl mx-auto m-4 text-gray-500 lg:mb-8 dark:text-gray-400">
+                    <h3 class="text-lg font-semibold text-center text-gray-700 dark:text-white">notes</h3>
+                    <p class="my-4">Aesthetically, the well designed components are beautiful and will undoubtedly level
+                        up your next application. Aesthetically, the well designed components are beautiful and will
+                        undoubtedly level
+                        up your next application. Aesthetically, the well designed components are beautiful and will
+                        undoubtedly level
+                        up your next application. Aesthetically, the well designed components are beautiful and will
+                        undoubtedly level
+                        up your next application."</p>
+                </blockquote>
+            </figure>
+            <figure
+                class="flex flex-col items-center justify-center p-8 bg-white border-b border-gray-200 rounded-bl-lg md:border-b-0 md:border-r dark:bg-gray-800 dark:border-gray-700">
+                <figcaption class="flex items-center justify-center space-x-3">
+                    <div class="space-y-0.5 font-medium dark:text-white text-left">
+
+                        <h2 class="mb-2 text-lg font-semibold text-gray-700 dark:text-white">ingredients</h2>
+                        <ul class="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
+                            <!-- individual items -->
+                            <li class="flex items-center">
+                                <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                carrot
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                carrot
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                carrot
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                carrot
+                            </li>
+                        </ul>
+
+                    </div>
+                </figcaption>
+            </figure>
+            <figure
+                class="flex flex-col items-center justify-center p-8 text-center bg-white border-gray-200 rounded-b-lg md:rounded-br-lg dark:bg-gray-800 dark:border-gray-700">
+                <blockquote class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
+                    <h3 class="text-lg font-semibold text-center text-gray-700 dark:text-white">instructions</h3>
+                    <p class="my-4">Aesthetically, the well designed components are beautiful and will undoubtedly level
+                        up your next application. Aesthetically, the well designed components are beautiful and will
+                        undoubtedly level
+                        up your next application. Aesthetically, the well designed components are beautiful and will
+                        undoubtedly level
+                        up your next application. Aesthetically, the well designed components are beautiful and will
+                        undoubtedly level
+                        up your next application."</p>
+                </blockquote>
+            </figure>
+        </div>
+
+
+    </main>
+
+    <footer class="p-4 mt-auto bg-white">
+        <!-- Footer Content -->
+        <div class="text-center">
+            <p>© 2023 Your Recipe Site</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
