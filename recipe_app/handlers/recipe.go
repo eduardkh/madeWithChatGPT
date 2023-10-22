@@ -13,5 +13,8 @@ func GetRecipeHandler(c echo.Context) error {
 	if err != nil || recipe == nil {
 		return c.String(http.StatusNotFound, "Recipe not found")
 	}
-	return c.Render(http.StatusOK, "recipe.html", map[string]interface{}{"recipe": recipe})
+	return c.Render(http.StatusOK, "base.html", map[string]interface{}{
+		"Page":   "recipe",
+		"recipe": recipe,
+	})
 }

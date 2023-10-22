@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+{{ template "header" . }}
+
+<body class="bg-pastel flex flex-col min-h-screen">
+
+    <header class="p-4 flex flex-col items-center">
+        <a href="/" class="text-5xl font-bold text-gray-900 mb-2 hover:text-gray-800">
+            <h1>Recipe Home</h1>
+        </a>
+        <p class="text-gray-500">Your go-to platform for delightful recipes</p>
+    </header>
+    {{ if eq .Page "index" }}
+    {{ block "indexContent" . }}{{ end }}
+    {{ else if eq .Page "recipe" }}
+    {{ block "recipeContent" . }}{{ end }}
+    {{ end }}
+    {{ template "footer" . }}
+</body>
+
+</html>

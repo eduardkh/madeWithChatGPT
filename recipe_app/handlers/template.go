@@ -3,6 +3,7 @@ package handlers
 import (
 	"html/template"
 	"io"
+	"log"
 
 	"github.com/labstack/echo/v4"
 )
@@ -14,7 +15,14 @@ var funcMap = template.FuncMap{
 
 func TemplateRenderer() echo.Renderer {
 	tmpl := template.New("").Funcs(funcMap)
-	tmpl = template.Must(tmpl.ParseGlob("views/*.html"))
+	tmpl, err := tmpl.ParseGlob("views/*.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	tmpl, err = tmpl.ParseGlob("views/partials/*.html")
+	if err != nil {
+		log.Fatal(err)
+	}
 	return &templateRenderer{
 		templates: tmpl,
 	}

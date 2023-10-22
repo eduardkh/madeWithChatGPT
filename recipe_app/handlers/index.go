@@ -36,7 +36,8 @@ func GetRecipesHandler(c echo.Context) error {
 	totalPages := (total + pageSize - 1) / pageSize
 
 	// Render the index page with the fetched recipes and pagination data
-	return c.Render(http.StatusOK, "index.html", map[string]interface{}{
+	return c.Render(http.StatusOK, "base.html", map[string]interface{}{
+		"Page":       "index",
 		"recipes":    recipes,
 		"total":      total,
 		"page":       page,
