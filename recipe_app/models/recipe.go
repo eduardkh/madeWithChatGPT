@@ -16,6 +16,10 @@ import (
 
 type Recipe struct {
 	ID           string       `bson:"_id,omitempty"` // Include the ID field to uniquely identify recipes
+	Slug         string       `bson:"slug"`
+	Image        string       `bson:"image"`
+	Author       string       `bson:"author"`
+	Cuisine      string       `bson:"cuisine"`
 	Title        string       `bson:"title"`
 	Introduction string       `bson:"introduction"`
 	PrepTime     int          `bson:"prep_time"`

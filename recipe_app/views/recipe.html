@@ -1,6 +1,10 @@
 {{ define "recipeContent" }}
 <main class="p-12 flex flex-col items-center">
-    <h2 class="text-4xl font-bold text-gray-800 mb-4">{{.recipe.Title}}</h2>
+    <h2 class="text-4xl font-bold text-gray-800 mb-4">
+        {{.recipe.Title}}
+        <span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Recipe By: {{.recipe.Author}}</span>
+    </h2>
+
     <div class="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 md:grid-cols-2">
         <figure
             class="flex flex-col items-center justify-center p-8 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-tl-lg md:border-r dark:bg-gray-800 dark:border-gray-700">
@@ -25,7 +29,7 @@
                                 <path
                                     d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                             </svg>
-                            prep time: {{.recipe.PrepTime}} min
+                            Prep Time: {{.recipe.PrepTime}} min
                         </li>
                         <li class="flex items-center">
                             <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
@@ -34,7 +38,7 @@
                                 <path
                                     d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                             </svg>
-                            cook time: {{.recipe.CookTime}} min
+                            Cook Time: {{.recipe.CookTime}} min
                         </li>
                         <li class="flex items-center">
                             <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
@@ -43,7 +47,7 @@
                                 <path
                                     d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                             </svg>
-                            difficulty: {{.recipe.Difficulty.Level}}
+                            Difficulty: {{.recipe.Difficulty.Level}}
                         </li>
                     </ul>
 
@@ -53,18 +57,20 @@
                     <h2 class="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Recipe Info</h2>
                     <ul class="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
                         <!-- individual ingredient right side list-->
-                        <li class="flex items-center">author: Eduard Khiaev</li>
-                        <li class="flex items-center">categories: {{range .recipe.Categories}} <span
+                        <li class="flex items-center">Cuisine: <span
+                                class="bg-green-200 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{
+                                .recipe.Cuisine }}</span></li>
+                        <li class="flex items-center">Categories: {{range .recipe.Categories}} <span
                                 class="bg-green-50 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{.Name}}</span>{{end}}
                         </li>
-                        <li class="flex items-center">techniques: {{range .recipe.Techniques}} <span
+                        <li class="flex items-center">Techniques: {{range .recipe.Techniques}} <span
                                 class="bg-green-50 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{.Name}}</span>{{end}}
                         </li>
                     </ul>
                 </div>
             </figcaption>
             <blockquote class="max-w-2xl mx-auto m-4 text-gray-500 lg:mb-8 dark:text-gray-400">
-                <h3 class="text-lg font-semibold text-center text-gray-700 dark:text-white">notes</h3>
+                <h3 class="text-lg font-semibold text-center text-gray-700 dark:text-white">Notes</h3>
                 <p class="my-4">{{.recipe.Notes}}</p>
             </blockquote>
         </figure>
