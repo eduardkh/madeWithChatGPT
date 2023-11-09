@@ -1,97 +1,104 @@
 package main
 
 import (
-	"database/sql"
+	"encoding/csv"
 	"flag"
 	"fmt"
-	"log"
-	"regexp"
+	"io"
+	"os"
+	"path/filepath"
 	"strings"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	// Parse the command-line arguments
-	orgFlag := flag.Bool("organization", false, "Query by organization")
+	// Define the CLI flag
+	macFlag := flag.String("mac", "", "Full or partial MAC address to search for.")
+
+	// Parse the CLI flags
 	flag.Parse()
 
-	// Open the SQLite database
-	db, err := sql.Open("sqlite3", "oui.db")
+	// Concatenate all remaining arguments to handle unquoted dotted notation
+	macAddress := strings.Join(flag.Args(), "")
+
+	// If the mac flag is set, use it; otherwise, use the concatenated arguments
+	if *macFlag != "" {
+		macAddress = *macFlag
+	}
+
+	// Validate the MAC address input
+	if macAddress == "" {
+		fmt.Println("Please provide a MAC address using the -mac flag or as a regular argument.")
+		return
+	}
+
+	// Call the function to print OUI information
+	err := PrintOUIInfo(macAddress)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Error:", err)
 	}
-	defer db.Close()
+}
 
-	// Prepare the SQL statement for querying the data
-	var stmt *sql.Stmt
-	var query string
-	if *orgFlag {
-		stmt, err = db.Prepare("SELECT * FROM oui WHERE organization LIKE ?")
-		if err != nil {
-			log.Fatal(err)
-		}
-		query = strings.Join(flag.Args(), " ")
-	} else {
-		stmt, err = db.Prepare("SELECT * FROM oui WHERE oui LIKE ?")
-		if err != nil {
-			log.Fatal(err)
-		}
-		// Get the MAC address from the command-line arguments
-		if len(flag.Args()) != 1 {
-			log.Fatal("Usage: go run query_mac_address.go <mac_address> | [-organization <organization>]")
-		}
-		macAddress := flag.Args()[0]
+// PrintOUIInfo searches the OUI CSV file for the given MAC address and prints its information.
+func PrintOUIInfo(macAddress string) error {
+	// Standardize the MAC address by removing delimiters and converting to uppercase
+	macAddress = strings.ToUpper(macAddress)
+	macAddress = strings.NewReplacer(":", "", "-", "", ".", "").Replace(macAddress)
 
-		// Remove any non-alphanumeric characters from the MAC address
-		re := regexp.MustCompile(`[^0-9A-Fa-f]`)
-		macAddress = re.ReplaceAllString(macAddress, "")
-
-		// Convert the MAC address to lowercase
-		macAddress = strings.ToLower(macAddress)
-
-		// Extract the OUI from the MAC address
-		oui := macAddress[0:6]
-
-		query = oui + "%"
+	// Now that we've cleaned the MAC address, check if it's at least 6 characters long
+	if len(macAddress) < 6 {
+		return fmt.Errorf("MAC address must be at least 6 characters after standardizing")
 	}
-	defer stmt.Close()
 
-	// Execute the SQL statement with the query string as the parameter
-	rows, err := stmt.Query("%" + query + "%")
+	// Trim the MAC address to the first 6 characters (OUI portion)
+	ouiPortion := macAddress[:6]
+
+	// Get the local application data directory
+	appDataDir, err := os.UserConfigDir()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
-	defer rows.Close()
 
-	// Print the result
+	// Construct the path to the oui.csv file
+	csvFilePath := filepath.Join(appDataDir, "MyOUIApp", "oui.csv")
+
+	// Open the CSV file
+	file, err := os.Open(csvFilePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// Create a new CSV reader
+	reader := csv.NewReader(file)
+
+	// Read and ignore the header line
+	if _, err := reader.Read(); err != nil {
+		return err
+	}
+
+	// Iterate through the CSV records and print the matching OUI information
 	found := false
-	for rows.Next() {
-		var id int
-		var oui string
-		var organization string
-		var address string
-		var city string
-		var country string
-		err := rows.Scan(&id, &oui, &organization, &address, &city, &country)
+	for {
+		record, err := reader.Read()
 		if err != nil {
-			log.Fatal(err)
+			if err == io.EOF {
+				break
+			}
+			return err
 		}
-		if *orgFlag {
-			fmt.Printf("OUI:\t\t%s\nOrganization:\t%s\nAddress:\t%s\nCity:\t\t%s\nCountry:\t%s\n", oui, organization, address, city, country)
-		} else {
-			fmt.Printf("Organization:\t%s\nAddress:\t%s\nCity:\t\t%s\nCountry:\t%s\nOUI:\t\t%s\n", organization, address, city, country, strings.ToUpper(oui))
+
+		// Check if the current record contains the OUI portion of the MAC address
+		if strings.HasPrefix(strings.ToUpper(record[1]), ouiPortion) {
+			fmt.Printf("MAC Address: \"%s\"\n", macAddress)
+			fmt.Printf("Vendor: \"%s\"\n", record[2])
+			found = true
+			break // Stop after finding the first match
 		}
-		found = true
 	}
+
 	if !found {
-		if *orgFlag {
-			fmt.Printf("No results found for organization: %s\n", query)
-		} else {
-			fmt.Printf("No results found for MAC address: %s\n", query)
-		}
+		fmt.Println("No matching records found for the given MAC address.")
 	}
-	if err := rows.Err(); err != nil {
-		log.Fatal(err)
-	}
+
+	return nil
 }
