@@ -1,0 +1,84 @@
+info:
+  contact: {}
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of users
+          schema:
+            type: string
+      summary: List all users
+    post:
+      consumes:
+      - application/json
+      description: Add a new user to the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User created
+          schema:
+            type: string
+      summary: Create a new user
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a user from the system
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User deleted
+          schema:
+            type: string
+      summary: Delete a user
+    get:
+      consumes:
+      - application/json
+      description: Get details of a user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User retrieved
+          schema:
+            type: string
+      summary: Get a user by ID
+    put:
+      consumes:
+      - application/json
+      description: Update details of a user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User updated
+          schema:
+            type: string
+      summary: Update a user
+swagger: "2.0"
