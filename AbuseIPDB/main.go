@@ -3,10 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
-	"os"
-	"path/filepath"
+
+	"github.com/spf13/viper"
 )
 
 // AbuseIPDBResponse represents the JSON response structure from AbuseIPDB API
@@ -38,17 +37,22 @@ type AbuseIPDBResponse struct {
 	} `json:"data"`
 }
 
-// ReadAPIKey reads the API key from a config file
-func ReadAPIKey(configFilePath string) (string, error) {
-	data, err := os.ReadFile(configFilePath)
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
+func initConfig() error {
+	viper.AddConfigPath("$APPDATA/show") // Use $APPDATA environment variable
+	viper.SetConfigName("config")        // Configuration file name (without extension)
+	viper.SetConfigType("yaml")          // Configuration file type
+
+	return viper.ReadInConfig() // Find and read the config file
 }
 
-// QueryAbuseIPDB makes a request to the AbuseIPDB API and returns the result
-func QueryAbuseIPDB(ipAddress, apiKey string) (*AbuseIPDBResponse, error) {
+func getAPIKey() (string, error) {
+	if err := initConfig(); err != nil {
+		return "", err
+	}
+	return viper.GetString("api_key"), nil
+}
+
+func queryAbuseIPDB(ipAddress, apiKey string) (*AbuseIPDBResponse, error) {
 	url := fmt.Sprintf("https://api.abuseipdb.com/api/v2/check?maxAgeInDays=90&verbose&ipAddress=%s", ipAddress)
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Add("Key", apiKey)
@@ -69,29 +73,7 @@ func QueryAbuseIPDB(ipAddress, apiKey string) (*AbuseIPDBResponse, error) {
 	return &result, nil
 }
 
-func main() {
-	// Get the local application data directory
-	appDataDir, err := os.UserConfigDir()
-	if err != nil {
-		log.Println(err)
-	}
-
-	configFilePath := filepath.Join(appDataDir, "show", "show.config")
-
-	apiKey, err := ReadAPIKey(configFilePath)
-	if err != nil {
-		fmt.Println("Error reading API key:", err)
-		return
-	}
-
-	// ipAddress := "212.70.149.150" // Replace with dynamic input as needed
-	ipAddress := "8.8.8.8" // Replace with dynamic input as needed
-	response, err := QueryAbuseIPDB(ipAddress, apiKey)
-	if err != nil {
-		fmt.Println("Error querying AbuseIPDB:", err)
-		return
-	}
-
+func printAbuseIPDBResponse(response *AbuseIPDBResponse) {
 	fmt.Printf("IP Address            : %+v\n", response.Data.IPAddress)
 	fmt.Printf("Abuse Confidence Score: %+v\n", response.Data.AbuseConfidenceScore)
 	fmt.Printf("Country Code          : %+v\n", response.Data.CountryCode)
@@ -122,4 +104,22 @@ func main() {
 	} else {
 		fmt.Println("No reports available.")
 	}
+}
+
+func main() {
+	apiKey, err := getAPIKey()
+	if err != nil {
+		fmt.Println("Error reading API key:", err)
+		return
+	}
+
+	// ipAddress := "8.8.8.8" // Replace with dynamic input as needed
+	ipAddress := "212.70.149.150" // Replace with dynamic input as needed
+	response, err := queryAbuseIPDB(ipAddress, apiKey)
+	if err != nil {
+		fmt.Println("Error querying AbuseIPDB:", err)
+		return
+	}
+
+	printAbuseIPDBResponse(response)
 }
