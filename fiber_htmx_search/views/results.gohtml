@@ -1,0 +1,16 @@
+{{ if .users }}
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+  </tr>
+  {{ range .users }}
+  <tr>
+    <td>{{ .name }}</td>
+    <td>{{ .email }}</td>
+  </tr>
+  {{ end }}
+</table>
+{{ else }}
+<div></div>
+{{ end }}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Real-time Search with HTMX</title>
+    <!-- Add HTMX -->
+    <script src="https://unpkg.com/htmx.org"></script>
+</head>
+
+<body>
+    <h1>HTMX Search </h1>
+    <p>search for a username from here or email
+        <a href="https://jsonplaceholder.typicode.com/users">jsonplaceholder</a>
+    </p>
+    <input type="text" name="query" placeholder="Search by name or email" hx-get="/search"
+        hx-trigger="keyup delay:250ms" hx-target="#results" hx-include="input[name='query']">
+    <div id="results">
+
+    </div>
+</body>
+
+</html>
