@@ -21,28 +21,29 @@ func main() {
 
 	// Search endpoint for HTMX the query
 	app.Get("/search", func(c *fiber.Ctx) error {
-		// Return an empty div if the search query is empty
 		query := strings.ToLower(c.Query("query"))
-		if query == "" {
-			return c.SendString("<div></div>")
-		}
-		// Query the API endpoint
-		resp, err := http.Get("https://jsonplaceholder.typicode.com/users")
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
 
-		var users []map[string]interface{}
-		json.NewDecoder(resp.Body).Decode(&users)
-
-		// Loop through the response
 		var filteredUsers []map[string]interface{}
-		for _, user := range users {
-			name := strings.ToLower(user["name"].(string))
-			email := strings.ToLower(user["email"].(string))
-			if strings.Contains(name, query) || strings.Contains(email, query) {
-				filteredUsers = append(filteredUsers, user)
+
+		// Only proceed with the API call if the query is not empty
+		if query != "" {
+			// Query the API endpoint
+			resp, err := http.Get("https://jsonplaceholder.typicode.com/users")
+			if err != nil {
+				return err
+			}
+			defer resp.Body.Close()
+
+			var users []map[string]interface{}
+			json.NewDecoder(resp.Body).Decode(&users)
+
+			// Loop through the response
+			for _, user := range users {
+				name := strings.ToLower(user["name"].(string))
+				email := strings.ToLower(user["email"].(string))
+				if strings.Contains(name, query) || strings.Contains(email, query) {
+					filteredUsers = append(filteredUsers, user)
+				}
 			}
 		}
 
@@ -50,7 +51,6 @@ func main() {
 		return c.Render("results", fiber.Map{
 			"users": filteredUsers,
 		})
-
 	})
 
 	log.Fatal(app.Listen(":3000"))
