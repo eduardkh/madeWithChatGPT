@@ -32,6 +32,13 @@ goose -dir migrations postgres "host=localhost user=postgres password=postgres d
 > SQLc
 
 ```bash
-# create and populate the sqlc.yaml file
+# populate the sqlc.yaml file
+sqlc init
+
 # create and populate the query/todos.sql file
+
+# generate go code
+sqlc generate
+
+# run simple CRUD in main.go file
 ```
