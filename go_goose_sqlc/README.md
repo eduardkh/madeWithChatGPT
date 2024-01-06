@@ -28,3 +28,10 @@ goose -dir migrations create create_todos_table sql
 goose -dir migrations postgres "host=localhost user=postgres password=postgres dbname=postgres sslmode=disable" up
 goose -dir migrations postgres "host=localhost user=postgres password=postgres dbname=postgres sslmode=disable" status
 ```
+
+> SQLc
+
+```bash
+# create and populate the sqlc.yaml file
+# create and populate the query/todos.sql file
+```
