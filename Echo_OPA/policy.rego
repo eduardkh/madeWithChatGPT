@@ -4,5 +4,5 @@ default allow = false
 
 # Allow access if the user role is "admin"
 allow {
-	input.user == "yourUserName"
+	input.user == "admin"
 }
