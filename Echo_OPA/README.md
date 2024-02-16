@@ -15,5 +15,5 @@ curl --location 'http://localhost:8080/' --header 'User: notadmin'
 
 ```bash
 opa eval --data policy.rego --input input.json "data.myapp.authz.allow"
-
+opa eval --data policy.rego --input input.json "data.myapp.authz.allow" --format raw
 ```
