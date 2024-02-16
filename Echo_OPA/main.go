@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v4"
 	"github.com/open-policy-agent/opa/rego"
@@ -46,7 +46,7 @@ func main() {
 	e := echo.New()
 
 	// Load policy content from file
-	policyContent, err := ioutil.ReadFile("policy.rego")
+	policyContent, err := os.ReadFile("policy.rego")
 	if err != nil {
 		log.Fatalf("Failed to load policy: %v", err)
 	}
