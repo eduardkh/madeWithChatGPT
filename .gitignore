@@ -20,3 +20,4 @@ scrapligobackupconfig
 .venv/
 venv/
 .env
+*.wasm
