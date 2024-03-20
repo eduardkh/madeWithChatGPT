@@ -1,0 +1,19 @@
+.calc-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+    /* Adjusted for compactness */
+    font-size: 1rem;
+    /* Ensure text is readable */
+    background-color: #f3f4f6;
+    /* Light grey */
+    color: #111827;
+    /* Almost black */
+    transition: background-color 200ms;
+}
+
+.calc-button:hover {
+    background-color: #d1d5db;
+    /* Darker grey */
+}

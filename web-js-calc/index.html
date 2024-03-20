@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-xs mx-auto rounded-lg shadow-lg bg-white dark:bg-gray-800">
+        <div class="p-6">
+            <div class="mb-4 text-3xl text-right dark:text-white">0</div>
+            <div class="grid grid-cols-4 gap-1">
+                <!-- Calculator buttons with rounded-md class for rounded corners -->
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">7</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">8</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">9</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">/</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">4</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">5</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">6</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">*</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">1</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">2</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">3</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">-</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">0</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">CE</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">=</button>
+                <button class="calc-button rounded-md shadow hover:shadow-sm active:shadow-inner">+</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
