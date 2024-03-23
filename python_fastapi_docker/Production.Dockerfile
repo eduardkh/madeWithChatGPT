@@ -16,4 +16,4 @@ RUN adduser --disabled-password --gecos '' webrunner
 USER webrunner
 
 # Start the application
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "app:app", "--bind", "0.0.0.0:8000"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
