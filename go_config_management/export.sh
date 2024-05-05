@@ -1,0 +1,2 @@
+export MYAPP_BASE=30
+export MYAPP_INCREMENT=3
