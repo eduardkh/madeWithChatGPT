@@ -3,8 +3,10 @@ import json
 from flask import Flask, jsonify, render_template
 from netmiko import ConnectHandler
 from apscheduler.schedulers.background import BackgroundScheduler
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 mac_addresses = []
 
 
@@ -34,7 +36,9 @@ def get_mac_addresses():
     # Close the connection
     conn.disconnect()
 
-    mac_addresses = output
+    if mac_addresses != output:
+        mac_addresses = output
+        socketio.emit('update_mac_addresses', json.dumps(mac_addresses))
 
 
 @app.route('/')
@@ -56,4 +60,4 @@ if __name__ == '__main__':
     scheduler.add_job(scheduled_task, 'interval', seconds=5)
     scheduler.start()
     get_mac_addresses()
-    app.run(debug=True)
+    socketio.run(app, debug=True)

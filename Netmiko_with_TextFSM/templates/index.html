@@ -1,15 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <title>MAC Address Table</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
   </head>
   <body>
     <div class="container">
       <h1 class="mt-5">MAC Address Table</h1>
-      <table class="table table-bordered mt-3">
+      <table class="table table-bordered mt-3" id="mac-table">
         <thead>
           <tr>
             <th>VLAN ID</th>
@@ -18,7 +24,7 @@
             <th>Destination Port</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="mac-tbody">
           {% for mac in mac_addresses %}
           <tr>
             <td>{{ mac.vlan_id }}</td>
@@ -30,5 +36,37 @@
         </tbody>
       </table>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+      var socket = io();
+
+      function updateMacTable(macAddresses) {
+        var tbody = document.getElementById("mac-tbody");
+        tbody.innerHTML = "";
+        macAddresses.forEach(function (mac) {
+          var row = document.createElement("tr");
+          var vlanIdCell = document.createElement("td");
+          vlanIdCell.textContent = mac.vlan_id;
+          var addressCell = document.createElement("td");
+          addressCell.textContent = mac.destination_address;
+          var typeCell = document.createElement("td");
+          typeCell.textContent = mac.type;
+          var portCell = document.createElement("td");
+          portCell.textContent = mac.destination_port.join(", ");
+
+          row.appendChild(vlanIdCell);
+          row.appendChild(addressCell);
+          row.appendChild(typeCell);
+          row.appendChild(portCell);
+
+          tbody.appendChild(row);
+        });
+      }
+
+      socket.on("update_mac_addresses", function (data) {
+        var macAddresses = JSON.parse(data);
+        updateMacTable(macAddresses);
+      });
+    </script>
   </body>
 </html>
