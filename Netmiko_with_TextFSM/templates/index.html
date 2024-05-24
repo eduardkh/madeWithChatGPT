@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>MAC Address Table</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-5">MAC Address Table</h1>
+      <table class="table table-bordered mt-3">
+        <thead>
+          <tr>
+            <th>VLAN ID</th>
+            <th>Destination Address</th>
+            <th>Type</th>
+            <th>Destination Port</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for mac in mac_addresses %}
+          <tr>
+            <td>{{ mac.vlan_id }}</td>
+            <td>{{ mac.destination_address }}</td>
+            <td>{{ mac.type }}</td>
+            <td>{{ mac.destination_port | join(', ') }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
