@@ -36,3 +36,8 @@ docker run -d --name keycloak -p 8080:8080 \
   "confidential-port": 0
 }
 ```
+
+> Add AuthZ to Webapp
+
+- Add roles under Client (my-go-app)
+- Map roles to User
