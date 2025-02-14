@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 
@@ -118,4 +119,49 @@ func GetRecipe(id string) (*Recipe, error) {
 		return nil, err
 	}
 	return &recipe, nil
+}
+
+func GetAllRecipes() ([]Recipe, error) {
+	collection := client.Database("recipeDB").Collection("recipes")
+
+	// Find all recipes without any filter
+	cursor, err := collection.Find(context.TODO(), bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.TODO())
+
+	var recipes []Recipe
+	if err = cursor.All(context.TODO(), &recipes); err != nil {
+		return nil, err
+	}
+
+	return recipes, nil
+}
+
+func SearchRecipes(query string) ([]Recipe, error) {
+	var matchedRecipes []Recipe
+
+	// Get all recipes first
+	recipes, err := GetAllRecipes()
+	if err != nil {
+		return nil, err
+	}
+
+	// Filter recipes based on search query
+	for _, recipe := range recipes {
+		if strings.Contains(strings.ToLower(recipe.Title), query) ||
+			strings.Contains(strings.ToLower(recipe.Introduction), query) ||
+			strings.Contains(strings.ToLower(recipe.Author), query) {
+			matchedRecipes = append(matchedRecipes, recipe)
+
+			// Debug prints (optional - remove in production)
+			// fmt.Println("Recipe match found:")
+			// fmt.Printf("Title: %s\n", recipe.Title)
+			// fmt.Printf("Author: %s\n", recipe.Author)
+			// fmt.Println("-------------------")
+		}
+	}
+
+	return matchedRecipes, nil
 }

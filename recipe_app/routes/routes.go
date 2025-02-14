@@ -9,4 +9,5 @@ import (
 func RegisterRoutes(e *echo.Echo) {
 	e.GET("/", handlers.GetRecipesHandler)
 	e.GET("/recipe/:id", handlers.GetRecipeHandler)
+	e.GET("/api/search", handlers.SearchRecipesHandler)
 }

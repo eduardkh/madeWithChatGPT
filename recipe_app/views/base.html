@@ -9,6 +9,8 @@
             <h1>Recipe Home</h1>
         </a>
         <p class="text-gray-500">Your go-to platform for delightful recipes</p>
+        <!-- Add HTMX -->
+        <script src="https://unpkg.com/htmx.org"></script>
     </header>
     {{ if eq .Page "index" }}
     {{ block "indexContent" . }}{{ end }}

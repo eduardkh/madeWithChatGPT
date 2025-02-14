@@ -1,60 +1,67 @@
 {{ define "indexContent" }}
-<div class="flex justify-center w-full">
-    <input type="search" placeholder="Search recipes..."
-        class="w-1/2 p-2 text-lg leading-relaxed tracking-wide rounded-l border border-r-0">
-    <button type="submit"
+<div class="flex justify-center w-full mb-8">
+    <input type="search" name="query" placeholder="Search recipes..." hx-get="/api/search"
+        hx-trigger="keyup delay:500ms, search" hx-target="#searchResults" hx-swap="innerHTML"
+        class="w-2/3 p-2 text-lg leading-relaxed tracking-wide rounded-l border border-r-0">
+    <button hx-get="/api/search" hx-trigger="click" hx-target="#searchResults" hx-include="[name='query']"
         class="bg-green-500 text-white text-2xl leading-relaxed tracking-wide w-1/6 py-1 rounded-r hover:bg-green-400">
         <span class="block md:hidden icon-span"><i class="fas fa-search"></i></span>
         <span class="hidden md:block">Search</span>
     </button>
 </div>
 
-<main class="p-4 grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-auto">
-    <!-- Recipe Cards -->
-    {{ range .recipes }}
+<div id="searchResults">
+    <!-- Initial view with pagination -->
+    {{ if not .query }}
+    <main class="p-4 grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-auto">
+        {{ range .recipes }}
 
-    <div class="bg-white p-4 rounded shadow hover:bg-green-50">
-        <a href="/recipe/{{ .ID }}">
-            <img src="https://cdn.pixabay.com/photo/2017/02/15/10/39/salad-2068220_960_720.jpg" alt="{{ .Title }}"
-                class="w-full rounded-t">
-        </a>
-        <h2 class="text-lg font-bold mt-2">{{ .Title }}</h2>
-        <p class="text-gray-500">{{ .Introduction }}</p>
-        <div class="mt-4 flex justify-between">
+        <div class="bg-white p-4 rounded shadow hover:bg-green-50">
+            <a href="/recipe/{{ .ID }}">
+                <img src="https://cdn.pixabay.com/photo/2017/02/15/10/39/salad-2068220_960_720.jpg" alt="{{ .Title }}"
+                    class="w-full rounded-t">
+            </a>
+            <h2 class="text-lg font-bold mt-2">{{ .Title }}</h2>
+            <p class="text-gray-500">{{ .Introduction }}</p>
+            <div class="mt-4 flex justify-between">
+            </div>
+
         </div>
 
-    </div>
+        {{ end }}
+    </main>
 
-    {{ end }}
-</main>
-
-<nav class="flex justify-center space-x-4 mb-4">
-    <!-- Font Awesome Icons -->
-    <!-- first page -->
-    <a href="/?page=1&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
-            class="fas fa-angle-double-left"></i></a>
-    <!-- previous page -->
-    {{ if gt .page 1 }}
-    <a href="/?page={{ previousPage .page }}&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
-            class="fas fa-angle-left"></i></a>
+    <nav class="flex justify-center space-x-4 mb-4">
+        <!-- Font Awesome Icons -->
+        <!-- first page -->
+        <a href="/?page=1&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
+                class="fas fa-angle-double-left"></i></a>
+        <!-- previous page -->
+        {{ if gt .page 1 }}
+        <a href="/?page={{ previousPage .page }}&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
+                class="fas fa-angle-left"></i></a>
+        {{ else }}
+        <span class="text-gray-400 flex items-center cursor-not-allowed">
+            <i class="fas fa-angle-left"></i>
+        </span>
+        {{ end }}
+        <!-- current page -->
+        <a href="#" class="text-indigo-500">{{ .page }} of {{ .totalPages }}</a>
+        <!-- next page -->
+        {{ if lt .page .totalPages }}
+        <a href="/?page={{ nextPage .page }}&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
+                class="fas fa-angle-right"></i></a>
+        {{ else }}
+        <span class="text-gray-400 flex items-center cursor-not-allowed">
+            <i class="fas fa-angle-right"></i>
+        </span>
+        {{ end }}
+        <!-- last page -->
+        <a href="/?page={{ .totalPages }}&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
+                class="fas fa-angle-double-right"></i></a>
+    </nav>
     {{ else }}
-    <span class="text-gray-400 flex items-center cursor-not-allowed">
-        <i class="fas fa-angle-left"></i>
-    </span>
+    {{ template "results" . }}
     {{ end }}
-    <!-- current page -->
-    <a href="#" class="text-indigo-500">{{ .page }} of {{ .totalPages }}</a>
-    <!-- next page -->
-    {{ if lt .page .totalPages }}
-    <a href="/?page={{ nextPage .page }}&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
-            class="fas fa-angle-right"></i></a>
-    {{ else }}
-    <span class="text-gray-400 flex items-center cursor-not-allowed">
-        <i class="fas fa-angle-right"></i>
-    </span>
-    {{ end }}
-    <!-- last page -->
-    <a href="/?page={{ .totalPages }}&pagesize={{ .pageSize }}" class="text-indigo-500 flex items-center"><i
-            class="fas fa-angle-double-right"></i></a>
-</nav>
+</div>
 {{ end }}
