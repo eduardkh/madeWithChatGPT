@@ -1,88 +1,115 @@
 {{ define "recipeContent" }}
 <main class="p-12 flex flex-col items-center">
-    <h2 class="text-4xl font-bold text-gray-800 mb-2">
-        {{.recipe.Title}}
-    </h2>
-    <span
-        class="bg-gray-100 text-gray-800 text-sm font-medium mb-4 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Recipe
-        By: {{.recipe.Author}}</span>
+    <!-- Header section with separator -->
+    <div
+        class="w-full max-w-7xl pt-4 border-t border-gray-200 border-opacity-80 dark:border-gray-700 mb-8 flex flex-col items-center">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4 text-center">
+            {{.recipe.Title}}
+        </h2>
+        <span
+            class="bg-gray-100 text-gray-800 text-sm font-medium mb-4 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 inline-block">
+            Recipe By: {{.recipe.Author}}
+        </span>
+    </div>
 
-    <div class="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 md:grid-cols-2">
-        <figure
-            class="flex flex-col items-center justify-center p-8 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-tl-lg md:border-r dark:bg-gray-800 dark:border-gray-700">
-            <figure class="max-w-lg">
-                <img class="h-auto max-w-full"
-                    src="https://cdn.pixabay.com/photo/2017/02/15/10/39/salad-2068220_960_720.jpg"
-                    alt="image description">
-            </figure>
-        </figure>
-        <figure
-            class="flex flex-col items-center justify-center p-8 text-center bg-white border-b border-gray-200 rounded-tr-lg dark:bg-gray-800 dark:border-gray-700">
-            <figcaption class="flex items-center justify-center space-x-3 mb-2">
-                <div class="space-y-0.5 font-medium dark:text-white text-left">
+    <div class="w-full max-w-7xl mx-auto mb-8 rounded-lg shadow-lg md:mb-12">
+        <!-- Desktop layout wrapper -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 min-h-[800px]">
+            <!-- Left column - Image -->
+            <div class="lg:col-span-1">
+                <figure
+                    class="h-full flex flex-col items-center justify-center p-2 m-x-11 bg-white rounded-t-lg lg:rounded-l-lg lg:rounded-t-none dark:bg-gray-800">
+                    <img class="w-full h-auto object-cover"
+                        src="https://cdn.pixabay.com/photo/2017/02/15/10/39/salad-2068220_960_720.jpg"
+                        alt="{{.recipe.Title}}">
+                </figure>
+            </div>
 
-                    <h2 class="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Recipe Summary</h2>
-                    <ul class="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
-                        <!-- individual ingredient left side list-->
-                        <li class="flex items-center">
-                            <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
-                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                viewBox="0 0 20 20">
-                                <path
-                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                            </svg>
-                            Prep Time: {{.recipe.PrepTime}} min
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
-                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                viewBox="0 0 20 20">
-                                <path
-                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                            </svg>
-                            Cook Time: {{.recipe.CookTime}} min
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
-                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                viewBox="0 0 20 20">
-                                <path
-                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                            </svg>
-                            Difficulty: {{.recipe.Difficulty.Level}}
-                        </li>
-                    </ul>
+            <!-- Recipe Info -->
+            <div class="lg:col-span-1">
+                <figure class="h-full flex flex-col items-stretch p-8 bg-white dark:bg-gray-800">
+                    <!-- Recipe Summary Section -->
+                    <div class="mb-8">
+                        <h2 class="mb-4 text-lg font-semibold text-gray-700 dark:text-white">Recipe Summary</h2>
+                        <ul class="space-y-2 text-gray-500 list-inside dark:text-gray-400">
+                            <li class="flex items-center">
+                                <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                Prep Time: {{.recipe.PrepTime}} min
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                Cook Time: {{.recipe.CookTime}} min
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                </svg>
+                                Difficulty: {{.recipe.Difficulty.Level}}
+                            </li>
+                        </ul>
+                    </div>
 
-                </div>
-                <div class="space-y-0.5 font-medium dark:text-white text-left">
+                    <!-- Recipe Info Section -->
+                    <div class="mb-8">
+                        <h2 class="mb-4 text-lg font-semibold text-gray-700 dark:text-white">Recipe Info</h2>
+                        <ul class="space-y-2 text-gray-500 list-inside dark:text-gray-400">
+                            <li class="flex items-center">
+                                Cuisine:
+                                <span
+                                    class="bg-green-200 text-xs font-medium ml-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                                    {{.recipe.Cuisine}}
+                                </span>
+                            </li>
+                            <li class="flex flex-wrap items-center gap-2">
+                                Categories:
+                                {{range .recipe.Categories}}
+                                <span
+                                    class="bg-green-50 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                                    {{.Name}}
+                                </span>
+                                {{end}}
+                            </li>
+                            <li class="flex flex-wrap items-center gap-2">
+                                Techniques:
+                                {{range .recipe.Techniques}}
+                                <span
+                                    class="bg-green-50 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                                    {{.Name}}
+                                </span>
+                                {{end}}
+                            </li>
+                        </ul>
+                    </div>
 
-                    <h2 class="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Recipe Info</h2>
-                    <ul class="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
-                        <!-- individual ingredient right side list-->
-                        <li class="flex items-center">Cuisine: <span
-                                class="bg-green-200 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{
-                                .recipe.Cuisine }}</span></li>
-                        <li class="flex items-center">Categories: {{range .recipe.Categories}} <span
-                                class="bg-green-50 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{.Name}}</span>{{end}}
-                        </li>
-                        <li class="flex items-center">Techniques: {{range .recipe.Techniques}} <span
-                                class="bg-green-50 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{.Name}}</span>{{end}}
-                        </li>
-                    </ul>
-                </div>
-            </figcaption>
-            <blockquote class="max-w-2xl mx-auto m-4 text-gray-500 lg:mb-8 dark:text-gray-400">
-                <h3 class="text-lg font-semibold text-center text-gray-700 dark:text-white">Notes</h3>
-                <p class="my-4">{{.recipe.Notes}}</p>
-            </blockquote>
-        </figure>
-        <figure
-            class="flex flex-col items-center justify-center p-8 bg-white border-b border-gray-200 rounded-bl-lg md:border-b-0 md:border-r dark:bg-gray-800 dark:border-gray-700">
-            <figcaption class="flex items-center justify-center space-x-3">
-                <div class="space-y-0.5 font-medium dark:text-white text-left">
+                    <!-- Notes Section -->
+                    <div class="mt-auto">
+                        <h3 class="mb-4 text-lg font-semibold text-gray-700 dark:text-white">Notes</h3>
+                        <p class="text-gray-500 dark:text-gray-400">{{.recipe.Notes}}</p>
+                    </div>
+                </figure>
+            </div>
 
-                    <h2 class="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Ingredients</h2>
-                    <ul class="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
+            <!-- Ingredients and Instructions -->
+            <div class="lg:col-span-1">
+                <figure
+                    class="h-full flex flex-col items-stretch justify-between p-8 bg-white rounded-r-lg dark:bg-gray-800">
+                    <!-- Ingredients section -->
+                    <div class="mb-8">
+                        <h2 class="mb-4 text-lg font-semibold text-gray-700 dark:text-white">Ingredients</h2>
+                        <ul class="space-y-2 text-gray-500 list-inside dark:text-gray-400"></ul>
                         <!-- individual ingredients items -->
                         {{range .recipe.Ingredients}}
                         <li class="flex items-center">
@@ -95,18 +122,19 @@
                             {{.Name}} {{.Quantity}} {{.Unit}}
                         </li>
                         {{end}}
-                    </ul>
+                        </ul>
+                    </div>
 
-                </div>
-            </figcaption>
-        </figure>
-        <figure
-            class="flex flex-col items-center justify-center p-8 text-center bg-white border-gray-200 rounded-b-lg md:rounded-br-lg dark:bg-gray-800 dark:border-gray-700">
-            <blockquote class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
-                <h3 class="text-lg font-semibold text-center text-gray-700 dark:text-white">Instructions</h3>
-                <p class="my-4">{{.recipe.Instructions}}</p>
-            </blockquote>
-        </figure>
+                    <!-- Instructions section -->
+                    <div class="flex-grow">
+                        <h3 class="text-lg font-semibold text-gray-700 dark:text-white mb-4">Instructions</h3>
+                        <p class="text-gray-500 dark:text-gray-400 whitespace-pre-line">{{.recipe.Instructions}}</p>
+                    </div>
+                </figure>
+            </div>
+        </div>
     </div>
 </main>
+
+
 {{ end }}
