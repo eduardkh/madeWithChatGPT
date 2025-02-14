@@ -183,6 +183,9 @@ mongosh --host localhost --port 27017 --username ${MONGO_INITDB_ROOT_USERNAME} -
 ```
 
 ```php
+//  cd to the DB
+use recipeDB
+
 //  Read All Recipes
 db.recipes.find()
 
