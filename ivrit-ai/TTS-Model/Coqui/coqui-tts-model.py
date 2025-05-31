@@ -1,6 +1,6 @@
 from TTS.api import TTS
 
-tts = TTS(model_name="tts_models/multilingual/multi-dataset/your_tts")
+tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2")
 print(tts.speakers)
 
 tts.tts_to_file(
