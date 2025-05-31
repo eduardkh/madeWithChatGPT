@@ -1,19 +1,31 @@
 from transformers import VitsModel, AutoTokenizer
 import torch
 import scipy.io.wavfile
+import numpy as np
 
-# Load the model and tokenizer
+# Load model and tokenizer
+print("[+] Loading model and tokenizer...")
 model = VitsModel.from_pretrained("facebook/mms-tts-heb")
 tokenizer = AutoTokenizer.from_pretrained("facebook/mms-tts-heb")
 
-# Input Hebrew text
-text = "שלום, קוראים לי פליקס"
+# Hebrew input text
+text = " שלום, קוראים לי אלון. אני מדבר עברית."
+
+# Tokenize input
+print("[+] Tokenizing input text...")
 inputs = tokenizer(text, return_tensors="pt")
 
-# Generate speech waveform
+# Generate waveform
+print("[+] Generating waveform...")
 with torch.no_grad():
     output = model(**inputs).waveform
 
-# Save the output to a WAV file
-scipy.io.wavfile.write(
-    "output.wav", rate=model.config.sampling_rate, data=output.numpy())
+# Convert to 16-bit PCM
+print("[+] Converting to int16 and saving to output.wav...")
+waveform = output.squeeze().numpy()
+waveform_int16 = np.int16(waveform / np.max(np.abs(waveform)) * 32767)
+
+# Save as WAV file
+scipy.io.wavfile.write("output.wav", rate=int(model.config.sampling_rate), data=waveform_int16)
+
+print("[✓] Done! Output saved to output.wav")
