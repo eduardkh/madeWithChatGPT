@@ -1,32 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Chat</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        document.addEventListener('DOMContentLoaded', function () {
-            var socket = io.connect('http://' + document.domain + ':' + location.port);
-            socket.on('message', function (msg) {
-                var p = document.createElement('p');
-                p.innerHTML = msg;
-                document.getElementById('chat').appendChild(p);
-            });
-            document.getElementById('send').onclick = function () {
-                var messageInput = document.getElementById('message');
-                var message = messageInput.value;
-                socket.send(message);
-                messageInput.value = '';
-            };
-        });
-    </script>
+    <title>Simple Chat</title>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
 </head>
-
 <body>
-    <input id="message" type="text" placeholder="Enter your message">
+    <input id="message" type="text" placeholder="Message here">
     <button id="send">Send</button>
     <div id="chat"></div>
-</body>
 
+    <script>
+        const socket = io();
+        const user = prompt("Enter your name") || "Anonymous";
+
+        document.getElementById('send').onclick = () => {
+            const msg = document.getElementById('message').value;
+            socket.send(`${user}: ${msg}`);
+            document.getElementById('message').value = '';
+        };
+
+        socket.on('message', msg => {
+            const p = document.createElement('p');
+            p.textContent = msg;
+            document.getElementById('chat').appendChild(p);
+        });
+    </script>
+</body>
 </html>
