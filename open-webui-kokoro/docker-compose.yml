@@ -1,0 +1,25 @@
+version: "3.8"
+name: kokoro-stack
+
+services:
+  kokoro-fastapi-cpu:
+    image: ghcr.io/remsky/kokoro-fastapi-cpu
+    ports:
+      - "8880:8880"
+    restart: unless-stopped
+
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    ports:
+      - "8080:8080"
+    volumes:
+      - open-webui-data:/app/backend/data
+    restart: unless-stopped
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_API_KEY=dummy  # optional if your Ollama doesn't enforce auth
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  open-webui-data:
