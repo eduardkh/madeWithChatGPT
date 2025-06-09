@@ -1,23 +1,58 @@
+import argparse
+import re
 import requests
+import sys
 
-url = "https://run.hfd.co.il/RunCom.Server/Request.aspx?APPNAME=RUN&PRGNAME=ship_locate_blank&arguments=-AEP902050457,-AHfd003064592,-Ay,-Ajson"
 
-payload = {}
-headers = {
-    'Host': 'run.hfd.co.il',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0',
-    'Accept': 'application/json, text/javascript, */*; q=0.01',
-    'Accept-Language': 'he,he-IL;q=0.8,en-US;q=0.5,en;q=0.3',
-    'Accept-Encoding': 'gzip, deflate',
-    'X-Requested-With': 'XMLHttpRequest',
-    'Referer': 'https://run.hfd.co.il/EPOST_TRACK/',
-    'Sec-Fetch-Dest': 'empty',
-    'Sec-Fetch-Mode': 'cors',
-    'Sec-Fetch-Site': 'same-origin',
-    'Priority': 'u=0',
-    'Te': 'trailers'
-}
+def normalize_id(raw_id):
+    match = re.search(r'(\d+)', raw_id)
+    return match.group(1) if match else None
 
-response = requests.request("GET", url, headers=headers, data=payload)
 
-print(response.text)
+def track_shipment(epost_id):
+    epost_id = normalize_id(epost_id)
+
+    if not epost_id:
+        print("Invalid Epost ID")
+        sys.exit(1)
+
+    # Use a placeholder HFD value, not important
+    dummy_hfd = "000000000"
+
+    url = f"https://run.hfd.co.il/RunCom.Server/Request.aspx?APPNAME=RUN&PRGNAME=ship_locate_blank&arguments=-AEP{epost_id},-AHfd{dummy_hfd},-Ay,-Ajson"
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0',
+        'Accept': 'application/json',
+        'Referer': 'https://run.hfd.co.il/EPOST_TRACK/',
+    }
+
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        data = response.json().get("root", {})
+    except Exception as e:
+        print(f"Failed to fetch or parse response: {e}")
+        sys.exit(1)
+
+    print(f"\n📦 Shipment Number: {data.get('shipment_num')}")
+    print(f"👤 Receiver: {data.get('reciever_name')}")
+    print(f"🏢 Sender: {data.get('company_name')}")
+    print(f"📍 Pickup Point: {data.get('name_pudo')} ({data.get('address')})")
+    print(f"🕐 Opening Hours: {data.get('comments_pudo')}")
+    print(f"📞 Driver: {data.get('driver_name')} ({data.get('driver_phone')})")
+    print("\n📜 Tracking History:")
+
+    for stage in data.get("lines", []):
+        print(
+            f" - {stage['taarich_shlav']} {stage['shaa_shlav']} - {stage['teur_shlav_mishloah']}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Track Epost shipment using Epost ID only")
+    parser.add_argument(
+        "epost_id", help="Epost ID (with or without 'EP' prefix)")
+
+    args = parser.parse_args()
+    track_shipment(args.epost_id)
