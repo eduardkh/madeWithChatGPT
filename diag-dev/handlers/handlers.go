@@ -136,7 +136,8 @@ func DNS(c echo.Context) error {
 
 func Trace(c echo.Context) error {
 	host := c.FormValue("host")
-	out, err := runCmdWithTimestamps("mtr", "-r", "-c", "10", host)
+	// out, err := runCmdWithTimestamps("mtr", "-r", "-c", "10", host)
+	out, err := runCmdWithTimestamps("mtr", "-4", "-n", "-r", "-c", "1", host)
 	code := http.StatusOK
 	if err != nil {
 		code = http.StatusInternalServerError

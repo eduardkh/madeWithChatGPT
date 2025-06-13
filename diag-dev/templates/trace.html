@@ -1,10 +1,19 @@
-<form hx-post="/trace" hx-target="#out" class="mb-4 flex">
-  <input name="host" placeholder="Host or IP"
-    class="flex-grow border border-gray-300 rounded-l px-3 py-2 focus:ring-indigo-500" required>
-  <button class="bg-indigo-500 text-white px-4 rounded-r hover:bg-indigo-600">Traceroute</button>
+<form hx-post="/trace" hx-target="#out" class="inline-flex">
+  <input name="host" placeholder="Host or IP" required
+    class="w-96 px-3 py-1 border border-gray-300 rounded-l-lg focus:outline-none" />
+  <button type="submit"
+    class="-ml-px px-4 py-1 border border-gray-300 rounded-r-lg bg-gray-800 text-white hover:bg-gray-700 focus:outline-none">
+    Traceroute
+  </button>
 </form>
-<div class="mb-4 text-sm text-gray-600">
-  <strong>About Traceroute</strong><br>
-  Shows hop-by-hop path and latency to the target.
+
+<!-- About Section -->
+<p class="mt-4 text-sm text-gray-500">
+  <strong>About Traceroute:</strong> Shows hop-by-hop path and latency to the target.
+</p>
+
+<!-- Output Area -->
+<div id="out"
+  class="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4 font-mono text-sm whitespace-pre-wrap overflow-auto h-48">
+  <!-- Results will appear here -->
 </div>
-<div id="out" class="bg-gray-50 border border-gray-200 rounded p-4 font-mono text-sm whitespace-pre-wrap"></div>
