@@ -1,6 +1,28 @@
-# Dockerfile - Development environment for network diagnostic portal
-# Base image with Go toolchain and minimal footprint
-FROM golang:1.24-alpine
+# Dockerfile - MVP production container for network diagnostic portal
+
+# --- Builder Stage ---------------------------------------------------------
+FROM golang:1.24-alpine AS builder
+
+WORKDIR /app
+# Git for module fetching
+RUN apk add --no-cache git
+
+# Download dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy source code
+COPY cmd cmd
+COPY handlers handlers
+COPY templates templates
+COPY static static
+
+# Build the static binary
+RUN go build -o diagportal cmd/main.go
+
+
+# --- Runtime Stage ---------------------------------------------------------
+FROM alpine:3.18
 
 # Install network diagnostic & CLI tools
 RUN apk add --no-cache \
@@ -11,33 +33,20 @@ RUN apk add --no-cache \
     iproute2 \
     curl \
     jq \
-    liboping \
-    bash
+    liboping
 
-# iputils: ping
-# bind-tools: dig, nslookup
-# drill: DNS troubleshooting
-# mtr: ping + traceroute
-# iproute2: ip, ss for interface & route inspection
-# curl: HTTP connectivity checks
-# jq: JSON processing
-# liboping: library/API for ICMP “ping” in programs (optional)
-# bash: shell for development
-
-# Set working directory for mounting host code
+# Create app directory and copy artifacts
 WORKDIR /app
+COPY --from=builder /app/diagportal .
+COPY --from=builder /app/templates ./templates
+COPY --from=builder /app/static ./static
 
-# Expose application port (adjust if needed)
+# Expose port and run
 EXPOSE 8080
+ENTRYPOINT ["/app/diagportal"]
 
-# Default to bash shell for interactive development
-ENTRYPOINT ["/bin/bash"]
-
-# Build & Run instructions:
-# 1. Build the image:
-#    docker build -t diag-dev .
-# 2. Run for development (mount host project into /app):
-#    docker run -it --rm -p 8080:8080 -v $(pwd):/app diag-dev
-# Inside the container, develop and run your Go+Echo app:
-#    go run main.go
-# Use HTMX via CDN in your templates for zero-build frontend.
+# --- Build & Run Instructions ------------------------------------------------
+# Build the image:
+#   docker build -t diag-mvp:latest .
+# Run the container:
+#   docker run -d --rm -p 8080:8080 diag-mvp:latest
