@@ -1,39 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Network Toolbox</title>
   <link href="/static/css/tailwind.min.css" rel="stylesheet">
   <script src="/static/js/htmx.min.js"></script>
 </head>
+
 <body class="bg-gray-100 font-sans text-gray-800 p-6">
 
   <div class="max-w-4xl mx-auto">
-    <h1 class="text-4xl font-bold text-center text-gradient-from-blue-500-to-purple-500 mb-2">
-      Network Toolbox
-    </h1>
+    <h1 class="text-4xl font-bold text-center mb-2">Network Toolbox</h1>
     <p class="text-center text-gray-600 mb-6">
-      Diagnostics for your network infrastructure, and DNS configuration
+      Eddie's diagnostics for your network infrastructure, and DNS configuration
     </p>
 
     <!-- Tabs -->
-    <nav class="flex justify-center space-x-4 mb-6">
-      <button hx-get="/diag/ping"  hx-target="#panel" class="tab-btn">Ping</button>
-      <button hx-get="/diag/dns"   hx-target="#panel" class="tab-btn">DNS Lookup</button>
-      <button hx-get="/diag/trace" hx-target="#panel" class="tab-btn">Traceroute</button>
+    <nav class="flex justify-center mb-6" role="group">
+      <button hx-get="/diag/ping" hx-trigger="click" hx-target="#panel"
+        class="px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-900 rounded-l-lg hover:bg-gray-100 focus:outline-none">
+        Ping
+      </button>
+      <button hx-get="/diag/dns" hx-trigger="click" hx-target="#panel"
+        class="-ml-px px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-900 hover:bg-gray-100 focus:outline-none">
+        DNS Lookup
+      </button>
+      <button hx-get="/diag/trace" hx-trigger="click" hx-target="#panel"
+        class="-ml-px px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-900 rounded-r-lg hover:bg-gray-100 focus:outline-none">
+        Traceroute
+      </button>
     </nav>
 
-    <!-- Panel -->
+    <!-- Content Panel -->
     <div id="panel" class="bg-white shadow-lg rounded-lg p-6">
       <div hx-get="/diag/ping" hx-trigger="load" hx-target="this"></div>
     </div>
   </div>
 
-  <style>
-    /* small helper to highlight active tab */
-    .tab-btn {
-      @apply px-4 py-2 rounded-lg hover:bg-gray-200 focus:outline-none;
-    }
-  </style>
+  <script>
+    document.querySelectorAll('nav[role="group"] button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const buttons = document.querySelectorAll('nav[role="group"] button');
+        buttons.forEach(b => {
+          b.classList.remove('bg-gray-200', 'text-black');
+          b.classList.add('bg-white', 'text-gray-900');
+        });
+        btn.classList.remove('bg-white', 'text-gray-900');
+        btn.classList.add('bg-gray-200', 'text-black');
+      });
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      const first = document.querySelector('nav[role="group"] button');
+      if (first) {
+        first.classList.add('bg-gray-200', 'text-black');
+      }
+    });
+  </script>
+
 </body>
+
 </html>

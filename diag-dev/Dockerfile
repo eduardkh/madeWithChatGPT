@@ -33,7 +33,7 @@ RUN apk add --no-cache \
     iproute2 \
     curl \
     jq \
-    liboping
+    bash
 
 # Create app directory and copy artifacts
 WORKDIR /app
