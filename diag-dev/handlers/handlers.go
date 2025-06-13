@@ -112,11 +112,22 @@ func Ping(c echo.Context) error {
 
 func DNS(c echo.Context) error {
 	host := c.FormValue("host")
-	out, err := runCmdWithTimestamps("dig", "+noall", "+answer", host)
+	server := c.FormValue("server")
+
+	// build dig args
+	args := []string{"dig", "+noall", "+answer"}
+	if server != "" {
+		// query a specific server
+		args = append(args, "@"+server)
+	}
+	args = append(args, host)
+
+	// run with timestamps
+	out, err := runCmdWithTimestamps(args[0], args[1:]...)
 	code := http.StatusOK
-	if err != nil || out == "" {
+	if err != nil || strings.TrimSpace(out) == "" {
 		code = http.StatusInternalServerError
-		if out == "" {
+		if strings.TrimSpace(out) == "" {
 			out = "no DNS answers"
 		}
 	}
