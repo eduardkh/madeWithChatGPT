@@ -9,14 +9,19 @@ import (
 func main() {
 	e := echo.New()
 
-	// static assets (htmx, etc)
+	// serve static assets
 	e.Static("/static", "static")
 
-	// HTML templates
+	// load templates
 	e.Renderer = handlers.NewRenderer("templates/*.html")
 
-	// routes
+	// tab panel endpoints
 	e.GET("/", handlers.Index)
+	e.GET("/diag/ping", handlers.PingPanel)
+	e.GET("/diag/dns", handlers.DNSPanel)
+	e.GET("/diag/trace", handlers.TracePanel)
+
+	// action endpoints
 	e.POST("/ping", handlers.Ping)
 	e.POST("/dns", handlers.DNS)
 	e.POST("/trace", handlers.Trace)

@@ -1,0 +1,10 @@
+<form hx-post="/trace" hx-target="#panel > #out" class="mb-4 flex">
+  <input name="host" placeholder="Host or IP"
+         class="flex-grow border border-gray-300 rounded-l px-3 py-2 focus:ring-indigo-500" required>
+  <button class="bg-indigo-500 text-white px-4 rounded-r hover:bg-indigo-600">Traceroute</button>
+</form>
+<div class="mb-4 text-sm text-gray-600">
+  <strong>About Traceroute</strong><br>
+  Shows hop-by-hop path and latency to the target.
+</div>
+<div id="out" class="bg-gray-50 border border-gray-200 rounded p-4 font-mono text-sm whitespace-pre-wrap"></div>

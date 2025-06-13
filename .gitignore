@@ -21,6 +21,7 @@ scrapligobackupconfig
 *.ios
 .venv/
 venv/
+tmp/
 .env
 *.wasm
 *.wav

@@ -1,0 +1,10 @@
+<form hx-post="/dns" hx-target="#panel > #out" class="mb-4 flex">
+  <input name="host" placeholder="Domain (e.g. example.com)"
+         class="flex-grow border border-gray-300 rounded-l px-3 py-2 focus:ring-green-500" required>
+  <button class="bg-green-500 text-white px-4 rounded-r hover:bg-green-600">DNS Lookup</button>
+</form>
+<div class="mb-4 text-sm text-gray-600">
+  <strong>About DNS Lookup</strong><br>
+  Queries the domain’s authoritative name servers for answers.
+</div>
+<div id="out" class="bg-gray-50 border border-gray-200 rounded p-4 font-mono text-sm whitespace-pre-wrap"></div>
