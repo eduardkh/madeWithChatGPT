@@ -47,6 +47,6 @@ ENTRYPOINT ["/app/diagportal"]
 
 # --- Build & Run Instructions ------------------------------------------------
 # Build the image:
-#   docker build -t diag-mvp:latest .
+#   docker build -t eduardkh/diag-mvp:latest .
 # Run the container:
-#   docker run -d --rm -p 8080:8080 diag-mvp:latest
+#   docker run -d --rm -p 8080:8080 eduardkh/diag-mvp:latest
