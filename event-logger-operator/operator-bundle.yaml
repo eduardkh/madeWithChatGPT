@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: event-logger-operator-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: event-logger-operator
+  namespace: event-logger-operator-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: event-logger-operator-role
+  namespace: event-logger-operator-system
+rules:
+  # Leader election
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Allow creating Kubernetes Events
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: event-logger-operator-clusterrole
+rules:
+  # Manage the EventLogger CRD
+  - apiGroups: ["monitor.example.com"]
+    resources: ["eventloggers"]
+    verbs: ["get", "list", "watch"]
+  # If you’ll manage CR status updates
+  - apiGroups: ["monitor.example.com"]
+    resources: ["eventloggers/status"]
+    verbs: ["get", "update", "patch"]
+  - apiGroups: ["monitor.example.com"]
+    resources: ["eventloggers/finalizers"]
+    verbs: ["update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: event-logger-operator-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: event-logger-operator-clusterrole
+subjects:
+  - kind: ServiceAccount
+    name: event-logger-operator
+    namespace: event-logger-operator-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-logger-operator-controller-manager
+  namespace: event-logger-operator-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  template:
+    metadata:
+      labels:
+        control-plane: controller-manager
+    spec:
+      serviceAccountName: event-logger-operator
+      containers:
+        - name: manager
+          image: your-dockerhub/event-logger-operator:v0.1.0 # <-- replace with your pushed image
+          command:
+            - /manager
+          args:
+            - --leader-elect
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
