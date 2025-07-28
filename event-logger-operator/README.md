@@ -1,135 +1,51 @@
-# event-logger-operator
-// TODO(user): Add simple overview of use/purpose
+# Event Logger Operator — Step-by-Step Setup
 
-## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+This guide walks through building, pushing, and deploying the Event Logger Operator  
+so it can be run on a different machine without relying on `make deploy`.
 
-## Getting Started
+---
 
-### Prerequisites
-- go version v1.24.0+
-- docker version 17.03+.
-- kubectl version v1.11.3+.
-- Access to a Kubernetes v1.11.3+ cluster.
+## 1. Build and Push Operator Image
 
-### To Deploy on the cluster
-**Build and push your image to the location specified by `IMG`:**
+Run these on your **build machine**:
 
-```sh
-make docker-build docker-push IMG=<some-registry>/event-logger-operator:tag
+```bash
+make docker-build IMG=eduardkh/event-logger-operator:v0.1.0
+make docker-push IMG=eduardkh/event-logger-operator:v0.1.0
 ```
 
-**NOTE:** This image ought to be published in the personal registry you specified.
-And it is required to have access to pull the image from the working environment.
-Make sure you have the proper permission to the registry if the above commands don’t work.
+## 2. Generate CRDs
 
-**Install the CRDs into the cluster:**
-
-```sh
-make install
+```bash
+make manifests
 ```
 
-**Deploy the Manager to the cluster with the image specified by `IMG`:**
+## 3. Apply the CRDs (on the Target Machine)
 
-```sh
-make deploy IMG=<some-registry>/event-logger-operator:tag
+```bash
+kubectl apply -f config/crd/bases/
 ```
 
-> **NOTE**: If you encounter RBAC errors, you may need to grant yourself cluster-admin
-privileges or be logged in as admin.
+## 4. Deploy Operator Bundle (RBAC + Deployment)
 
-**Create instances of your solution**
-You can apply the samples (examples) from the config/sample:
-
-```sh
-kubectl apply -k config/samples/
+```bash
+kubectl apply -f operator-bundle.yaml
 ```
 
->**NOTE**: Ensure that the samples has default values to test it out.
+## 5. Restart Pod (Optional but Recommended)
 
-### To Uninstall
-**Delete the instances (CRs) from the cluster:**
-
-```sh
-kubectl delete -k config/samples/
+```bash
+kubectl delete pod -n event-logger-operator-system -l control-plane=controller-manager
 ```
 
-**Delete the APIs(CRDs) from the cluster:**
+## 6. Verify Deployment
 
-```sh
-make uninstall
+```bash
+kubectl get pods -n event-logger-operator-system
 ```
 
-**UnDeploy the controller from the cluster:**
+## Follow logs
 
-```sh
-make undeploy
+```bash
+kubectl logs -f deployment/event-logger-operator-controller-manager -n event-logger-operator-system
 ```
-
-## Project Distribution
-
-Following the options to release and provide this solution to the users.
-
-### By providing a bundle with all YAML files
-
-1. Build the installer for the image built and published in the registry:
-
-```sh
-make build-installer IMG=<some-registry>/event-logger-operator:tag
-```
-
-**NOTE:** The makefile target mentioned above generates an 'install.yaml'
-file in the dist directory. This file contains all the resources built
-with Kustomize, which are necessary to install this project without its
-dependencies.
-
-2. Using the installer
-
-Users can just run 'kubectl apply -f <URL for YAML BUNDLE>' to install
-the project, i.e.:
-
-```sh
-kubectl apply -f https://raw.githubusercontent.com/<org>/event-logger-operator/<tag or branch>/dist/install.yaml
-```
-
-### By providing a Helm Chart
-
-1. Build the chart using the optional helm plugin
-
-```sh
-operator-sdk edit --plugins=helm/v1-alpha
-```
-
-2. See that a chart was generated under 'dist/chart', and users
-can obtain this solution from there.
-
-**NOTE:** If you change the project, you need to update the Helm Chart
-using the same command above to sync the latest changes. Furthermore,
-if you create webhooks, you need to use the above command with
-the '--force' flag and manually ensure that any custom configuration
-previously added to 'dist/chart/values.yaml' or 'dist/chart/manager/manager.yaml'
-is manually re-applied afterwards.
-
-## Contributing
-// TODO(user): Add detailed information on how you would like others to contribute to this project
-
-**NOTE:** Run `make help` for more information on all potential `make` targets
-
-More information can be found via the [Kubebuilder Documentation](https://book.kubebuilder.io/introduction.html)
-
-## License
-
-Copyright 2025 you.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
