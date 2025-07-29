@@ -25,6 +25,20 @@ rules:
     verbs: ["create", "patch", "update"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: event-logger-operator-rolebinding-leader-election
+  namespace: event-logger-operator-system
+subjects:
+  - kind: ServiceAccount
+    name: event-logger-operator
+    namespace: event-logger-operator-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: event-logger-operator-role
+---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: event-logger-operator-clusterrole
@@ -40,6 +54,10 @@ rules:
   - apiGroups: ["monitor.example.com"]
     resources: ["eventloggers/finalizers"]
     verbs: ["update"]
+  # 👇 Add this block so operator can list Deployments
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -72,7 +90,7 @@ spec:
       serviceAccountName: event-logger-operator
       containers:
         - name: manager
-          image: your-dockerhub/event-logger-operator:v0.1.0 # <-- replace with your pushed image
+          image: eduardkh/event-logger-operator:v0.1.3 # <-- replace with your pushed image
           command:
             - /manager
           args:

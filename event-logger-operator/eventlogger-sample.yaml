@@ -1,0 +1,6 @@
+apiVersion: monitor.example.com/v1
+kind: EventLogger
+metadata:
+  name: watch-deployments
+  namespace: default
+spec: {}
