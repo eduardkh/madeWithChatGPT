@@ -8,6 +8,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/handler"
 
 	monitorv1 "github.com/you/event-logger-operator/api/v1"
 )
@@ -45,6 +46,9 @@ func (r *EventLoggerReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 func (r *EventLoggerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&monitorv1.EventLogger{}).
-		Owns(&appsv1.Deployment{}).
+		Watches(
+			&appsv1.Deployment{},
+			&handler.EnqueueRequestForObject{},
+		).
 		Complete(r)
 }

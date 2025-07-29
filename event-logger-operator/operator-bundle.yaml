@@ -90,7 +90,7 @@ spec:
       serviceAccountName: event-logger-operator
       containers:
         - name: manager
-          image: eduardkh/event-logger-operator:v0.1.3 # <-- replace with your pushed image
+          image: eduardkh/event-logger-operator:v0.1.4 # <-- replace with your pushed image
           command:
             - /manager
           args:
