@@ -1,7 +1,7 @@
 # Dockerfile - MVP production container for network diagnostic portal
 
 # --- Builder Stage ---------------------------------------------------------
-FROM golang:1.24-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 # Git for module fetching
@@ -20,9 +20,12 @@ COPY static static
 # Build the static binary
 RUN go build -o diagportal cmd/main.go
 
+# build the cfssl binaries
+RUN go install github.com/cloudflare/cfssl/cmd/cfssl@latest
+RUN go install github.com/cloudflare/cfssl/cmd/cfssljson@latest
 
 # --- Runtime Stage ---------------------------------------------------------
-FROM alpine:3.18
+FROM alpine:3.22.1
 
 # Install network diagnostic & CLI tools
 RUN apk add --no-cache \
@@ -41,12 +44,16 @@ COPY --from=builder /app/diagportal .
 COPY --from=builder /app/templates ./templates
 COPY --from=builder /app/static ./static
 
+# Copy the pre-compiled cfssl binaries from the builder stage
+COPY --from=builder /go/bin/cfssl /usr/local/bin/cfssl
+COPY --from=builder /go/bin/cfssljson /usr/local/bin/cfssljson
+
 # Expose port and run
 EXPOSE 8080
 ENTRYPOINT ["/app/diagportal"]
 
 # --- Build & Run Instructions ------------------------------------------------
 # Build the image:
-#   docker build -t eduardkh/diag-mvp:latest .
+# docker build -t eduardkh/diag-mvp:latest .
 # Run the container:
-#   docker run -d --rm -p 8080:8080 eduardkh/diag-mvp:latest
+# docker run -d --rm -p 8080:8080 eduardkh/diag-mvp:latest
