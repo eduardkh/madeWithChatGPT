@@ -1,0 +1,53 @@
+## Server ##
+server_name: "rocky9.local"
+public_baseurl: "http://rocky9.local:8008/"
+report_stats: false
+
+pid_file: /homeserver.pid
+log_config: "/data/log.config"
+
+## Media ##
+media_store_path: "/data/media"
+
+## Listeners ##
+listeners:
+  - port: 8008
+    bind_addresses: ['0.0.0.0']
+    type: http
+    tls: false
+    x_forwarded: false
+    resources:
+      - names: [client]
+        compress: true
+      - names: [federation]
+        compress: false
+
+## Database ##
+database:
+  name: psycopg2
+  args:
+    user: synapse
+    password: yourpassword
+    database: synapse
+    host: matrix_db
+    port: 5432
+
+## Registration ##
+enable_registration: true
+enable_registration_without_verification: true
+registration_shared_secret: "CHANGE_ME"
+
+## Required but empty ##
+app_service_config_files: []
+
+## Security ##
+macaroon_secret_key: "CHANGE_ME"
+signing_key_path: "/data/rocky9.local.signing.key"
+
+trusted_key_servers:
+  - server_name: matrix.org
+    verify_keys:
+      "ed25519:auto": "Noi6WqcDj0QmPxCNQqgezwTlBKrfqehY1u2FyWP9uYw"
+
+password_config:
+  enabled: true

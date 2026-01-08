@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:17
+    container_name: matrix_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: synapse
+      POSTGRES_USER: synapse
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U synapse -d synapse"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  synapse:
+    image: matrixdotorg/synapse:latest
+    container_name: matrix_synapse
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8008:8008"
+    volumes:
+      - ./synapse-data:/data
