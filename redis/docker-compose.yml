@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"  # Expose Redis to the host for Python clients
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  redis-cli:
+    image: redis:7-alpine
+    container_name: redis-cli
+    depends_on:
+      - redis
+    # Keep the container running so you can `docker exec -it redis-cli sh` and use `redis-cli`
+    entrypoint: ["tail", "-f", "/dev/null"]
+    stdin_open: true
+    tty: true
+
+volumes:
+  redis_data:
+    name: redis_data
