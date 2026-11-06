@@ -39,5 +39,8 @@ optimum-cli export openvino `
 # 3. Run inference
 python chat.py CPU # Intel i7-12700K
 python chat.py GPU.0 # Intel UHD 770
-python chat.py GPU.1 # NVIDIA RTX 3070
+python chat.py GPU.1 # NVIDIA RTX 3070, does not work
+
+# check iGPU memory limit
+python check-memory.py
 ```
