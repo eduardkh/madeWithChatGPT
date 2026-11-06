@@ -26,3 +26,4 @@ tmp/
 *.wasm
 *.wav
 bin/
+*OpenVINO/models/
