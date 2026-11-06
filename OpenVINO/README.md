@@ -44,3 +44,25 @@ python chat.py GPU.1 # NVIDIA RTX 3070, does not work
 # check iGPU memory limit
 python check-memory.py
 ```
+
+```powershell
+# serve with OVMS
+curl.exe -fL `
+  "https://github.com/openvinotoolkit/model_server/releases/download/v2026.4.1/ovms_windows_2026.4.1_python_on.zip" `
+  -o ovms.zip
+
+tar -xf ovms.zip
+
+.\ovms\setupvars.ps1
+.\ovms\ovms.exe --version
+
+.\ovms\ovms.exe `
+  --model_path "$((Resolve-Path .\models\tinyllama).Path)" `
+  --model_name tinyllama `
+  --task text_generation `
+  --target_device CPU `
+  --rest_port 8000
+
+# Verify the API
+curl.exe http://localhost:8000/v1/models
+```

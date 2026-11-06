@@ -27,3 +27,5 @@ tmp/
 *.wav
 bin/
 *OpenVINO/models/
+*OpenVINO/ovms/
+ovms.zip
